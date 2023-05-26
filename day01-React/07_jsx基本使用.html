@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,24 +8,29 @@
     <script src="./lib/react-dom.development.js"></script>
     <script src="./lib/babel.min.js"></script>
 </head>
+
 <body>
     <div id="root"></div>
 </body>
 <script type="text/babel">
     const root = ReactDOM.createRoot(document.querySelector("#root"));
-    const myDiv = <div>111</div>;
-    console.log(myDiv);
 
-    const myBox = (
+    const oDiv = <div>123</div>;// React.createElement('div',null,123)
+    console.log(oDiv); // jsx创建的react元素
+
+    const oBox = (  // jsx使用 () 可以进行换行和代码格式化
         <div>
             <h1>我是h1</h1>
             <p>
                 <span>我是span</span>
-            </p>    
+            </p>
         </div>
     )
 
-    root.render(myBox)
-    root.render(myDiv)
+    root.render(oDiv);
+
+    root.render(oBox);
+
 </script>
+
 </html>
