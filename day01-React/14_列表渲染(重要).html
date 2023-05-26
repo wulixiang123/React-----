@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    let arr = [1,2,3,4];
+    let arrLi = [<li key='1'>1</li>,<li key='2'>2</li>,<li key='3'>3</li>,<li key='4'>4</li>,]
+
+    //react列表渲染的核心要义：将普通数据的数组转化为 react元素的数组
+    // key 用于react diff算法，要求key值不能重复[ 推荐使用数据唯一标识 id ]
+    // let newArr = arr.map((item,index)=>{
+    //     return <li key={index}>{item}</li>
+    // })
+    let newArr = arr.map((item,index)=>(
+        <li key = {index}>{item}</li>
+    ))
+    console.log('newArr:',newArr);
+
+    // 复杂的数据类型
+    let todos = [
+        {id:1,title:'吃饭',isDone:true},
+        {id:1,title:'睡觉',isDone:true},
+        {id:1,title:'敲代码',isDone:false},
+    ]
+
+    let newTodos = todos.map(item=>(
+        <li key = {item.id}>
+            <p>标题:{item.title} <span>{item.isDone?'已完成':'未完成'}</span></p>
+        </li>
+    ))
+    console.log('newTodos',newTodos);
+    root.render((
+        <div>
+            <h3>普通数组列表渲染</h3>
+            <div>{arr}</div>
+
+            <h3>给普通数组渲染成一个li列表</h3>
+            <ul>{arrLi}</ul>
+
+            <h3>用map映射实现</h3>
+            <ul>{newArr}</ul>
+
+            <h3>复杂数据类型的数组</h3>
+            <ul>{newTodos}</ul>
+
+            <h3>列表渲染终极形态</h3>
+            <ul>
+                {todos.map(item=>(
+                    <li key = {item.id}>
+                        <p>标题:{item.title} <span>{item.isDone?'已完成':'未完成'}</span></p>
+                    </li>
+                    ))}
+            </ul>
+        </div>
+    ))
+</script>
+</html>
