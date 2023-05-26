@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+     /**
+     * jsx中绑定事件的方式，是通过标签属性的方式
+     * on + 事件名[首字母大写] onClick onChange  onMousemove
+     * 
+     * onClick={函数名[函数的定义、函数堆内存的引用地址]}
+     * 
+     * react 会自定将事件对象传给函数的第一个形参
+     *       该形参事件对象，不是原生的事件对象，而是经过react包装过的事件对象，该事件对象拥有跟原生几乎一样属性。并且比原生的事件对象好用，已经做过兼容新处理了
+     *       如果你想使用原生的事件对象，在nativeEvent属性上获取
+     * 
+     * react事件回调阻止默认行为还是  e.preventDefault();
+     * 
+     * 总结：
+     * 1. react事件回调函数调用者是window，所以打印this 是undefined
+     * 2. react事件插值语法中，只能填函数的定义
+     * 3. react事件回调函数的第一个形参，是事件对象
+     * 4. 如果想传递参数，需要外围包裹箭头函数
+     * 5. react 中的onChange 实际上是原生dom事件中的 onInput
+     * 6. 阻止默认行为： e.preventDefault()
+     * 
+     */
+
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    function fn1(e){
+        console.log('fn下的e的结果:',e);//React中的事件对象
+        e.preventDefault();//取消默认行为
+        console.log('this:',this);// undefined 因为react使用的是严格 模式，指向window的都指向undefined，说明：react事件回调函数的调用者是 window 【重要】
+    }
+
+    function fn2(a,b,c){
+        console.log('a:',a);
+        console.log('b:',b);
+        console.log('c:',c);
+    }
+    root.render((
+        <div>
+            <h3>click事件</h3>
+            <button onClick={fn1}>点击</button>
+            <a href="http://baidu.com" onClick={fn1}>百度</a>
+
+            <h3>那么事件回调函数如何传递参数??</h3>
+            <button onClick={fn2}>传递参数问题</button>
+            <hr/>
+            <button onClick={()=>fn2(1,2,3)}>传递参数问题, 包裹一个箭头函数</button>
+            <hr/>
+            <button onClick={(e)=>fn2(e,2,3)}>既传递参数也想要事件对象</button>
+            <hr/>
+            <button onClick={(e)=>fn2(1,e,3)}>既传递参数也想要事件对象</button>
+
+            <h3>onchange   oninput</h3>
+            <input type="text" onChange={(e)=>{
+                console.log('onChange下的e:',e);
+                console.log('onChange的value:',e.target.value);
+            }}/>
+            <input type="text" onInput={(e)=>{
+                console.log('onInput下的e:',e);
+                console.log('onInput的value:',e.target.value);
+            }}/>
+        </div>
+    ))
+</script>
+</html>
