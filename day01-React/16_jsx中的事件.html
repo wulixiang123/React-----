@@ -52,16 +52,21 @@
             <a href="http://baidu.com" onClick={fn1}>百度</a>
 
             <h3>那么事件回调函数如何传递参数??</h3>
-            <button onClick={fn2}>传递参数问题</button>
+            <button onClick={fn2}>传递参数问题</button>{//默认赋值给第一个参数
+            }
             <hr/>
-            <button onClick={()=>fn2(1,2,3)}>传递参数问题, 包裹一个箭头函数</button>
+            <button onClick={()=>fn2(1,2,3)}>传递参数问题, 包裹一个箭头函数</button>{//1,2,3
+            }
             <hr/>
-            <button onClick={(e)=>fn2(e,2,3)}>既传递参数也想要事件对象</button>
+            <button onClick={(e)=>fn2(e,2,3)}>既传递参数也想要事件对象</button>{//e在哪事件对象就赋值到哪
+            }
             <hr/>
-            <button onClick={(e)=>fn2(1,e,3)}>既传递参数也想要事件对象</button>
+            <button onClick={(e)=>fn2(1,e,3)}>既传递参数也想要事件对象</button>{//第二个值是事件对象
+            }
 
             <h3>onchange   oninput</h3>
-            <input type="text" onChange={(e)=>{
+            <input type="text" onChange={(e)=>{{//react 中的onChange 实际上也就是原生dom事件中的 onInput!!!
+            }
                 console.log('onChange下的e:',e);
                 console.log('onChange的value:',e.target.value);
             }}/>
