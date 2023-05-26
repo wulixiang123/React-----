@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    /**
+     *  1. 单分支：使用 && 运算     if
+     *  2. 双分支：if...else  三元表达式
+     *  3. 多分支：封装成函数
+     * 
+     *  插值语法，也可以渲染react元素
+     */
+
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    const myDiv = (<div id='box'>我是div</div>);
+
+    // 也可以实现但分支条件渲染，相对麻烦
+    let flag = true;
+    let single = null;
+    if(flag){
+        single = myDiv
+    }
+    
+    let loading = true;
+    let double = null;
+    if(loading){
+        double = <div>页面正在加载中...</div>
+    }else{
+        double = <div>页面加载成功!</div>
+    }
+
+    function run(age){
+        let style = null;
+        if(age <= 3){
+            style = <div>爬</div>
+        }else if(age > 4 && age <= 7){
+            style = <div>跑</div>
+        }else if(age > 7 && age < 18){
+            style = <div>飞~~~</div>
+        }
+        return style
+    }
+
+    root.render((
+        <div>
+            <h3>插值语法渲染React元素</h3>
+            {myDiv}
+
+            <h3>单分支渲染</h3>
+            {flag && myDiv}
+            {single}
+
+            <h3>双分支渲染</h3>
+            {loading ? <div>页面正在加载中...</div>:<div>页面加载成功!</div>}
+            {double}
+
+            <h3>多分支渲染</h3>
+            {run(2)}
+            {run(6)}
+        </div>
+    ))
+</script>
+</html>
