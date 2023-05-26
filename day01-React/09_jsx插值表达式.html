@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    /**
+     * js表达式和js语句区别？
+     * js表达式是有值的，可以用变量接收，也可以使用console打印，js语句是没有值的
+     * 
+     * js语句：
+     * 1. 赋值语句：let a = 1;
+     * 2. 条件判断：if...else    switch case
+     * 3. 循环语句：for   while  do...while      
+     * 
+     * js表达式：
+     * 1. 变量和常量：
+     *    1-1. 基本数据类型：undefined null string number boolean
+     *         不渲染任何值：true false null undefined
+     *    1-2. 引用数据类型：
+     *         对象: 直接报错
+     *         数组：将数组中的每一个元素挨个遍历渲染
+     *         函数 正则....
+     * 2. 三元表达式
+     * 3. 逻辑运算表达式： 5 && 8  false || 18    
+     * 4. 函数调用
+     * 
+     * jsx语法中的插值表达式 
+     * 1. 语法： {js表达式}
+     * 
+     */
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    let num = 90; // 变量 num 数字
+    root.render((
+        <div>
+            <h3>基本数据类型</h3>
+            <p>字符串: {'123'}</p>
+            <p>数字: {num}</p>
+            <h3>布尔值</h3>
+            <p>true： {true}</p>
+            <p>false {false}</p>
+            <h3>null</h3>
+            <p>null:{null}</p>
+            <h3>undefined</h3>
+            <p>undefined:{undefined}</p>
+
+            <h3>引用数据类型</h3>
+            {/*<p>对象: {{name:'atguigu',age:19}}</p>   对象直接报错*/}
+
+            {//
+            }
+            <h3>数组：</h3>
+            <p>数组：{[1,2,3,4]}</p>
+
+        </div>
+    ))
+</script>
+
+</html>
