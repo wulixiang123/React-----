@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <p class="box"></p>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    // 1. 没有标签属性.需要占位： {}、null、undefined
+    // let oDiv = React.createElement('div',{},123);
+    // let oDiv = React.createElement('div',null,123);
+    // let oDiv = React.createElement('div',undefined,123);
+
+    // let oDiv = React.createElement('div',[12345],123);// 也行，但是不推荐
+    // root.render(oDiv)
+
+
+    // 2. 特殊属性 class
+    let oSpan = React.createElement('span', {id:'box', class:'wrapper'}, '我是span')
+    //Invalid DOM property `class`. Did you mean `className`?
+    //不合法的    属性                      意思
+
+    // let oSpan = React.createElement('span', {id:'box', className:'wrapper'}, '我是span')
+
+    
+    console.dir(document.querySelector('p')); // 真实dom class属性用的就是 className
+    
+    root.render(oSpan);
+</script>
+</html>

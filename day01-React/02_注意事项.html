@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <!-- <div class="box"></div> -->
+</body>
+<script type="text/babel">
+    // 一个容器匹配多个root, 有效果但是有警告
+    // const root1 = ReactDOM.createRoot(document.querySelector("#root"));
+    // root1.render((
+    //     <div>root1</div>
+    // ))
+
+    // const root2 = ReactDOM.createRoot(document.querySelector("#root"));
+    // root2.render((
+    //     <div>root2</div>
+    // ))
+
+    // 一个页面可以有多个容器【不推荐】
+    // const root1 = ReactDOM.createRoot(document.querySelector("#root"));
+    // root1.render((
+    //     <div>root1</div>
+    // ))
+
+    // const root2 = ReactDOM.createRoot(document.querySelector(".box"));
+    // root2.render((
+    //     <div>root2</div>
+    // ))
+
+    // 结论：一个页面 一个容器对应一个唯一的root [推荐]
+
+    // 不能使用body作为容器
+
+    // const root = ReactDOM.createRoot(document.body)
+    // root.render('我是body')
+
+    // 不能使用html作为容器
+    // const root = ReactDOM.createRoot(document.documentElement)
+    // root.render('我是html')
+
+</script>
+
+</html>

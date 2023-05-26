@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    /**
+     * 创建react元素
+     * 语法：React.createElement(标签名,属性对象,子元素,子元素,....)
+     * 
+     * 
+     */
+    const oDiv = React.createElement('div',{id:'box',school:'尚硅谷'},1111,2222,3333);
+    console.log(oDiv); // 虚拟dom ==> react元素   type标签名 props：属性 props.children子元素
+    root.render(oDiv)
+
+    // 
+</script>
+</html>

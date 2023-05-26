@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+  
+    <!-- <div>
+        <h1>123</h1>
+        <p>
+            <span>123</span>
+        </p>
+    </div> -->
+</body>
+<script>
+    const root = ReactDOM.createRoot(document.querySelector('#root'));
+
+    const myDiv = React.createElement('div',null,
+    React.createElement('h1',null,123),
+    React.createElement('p',null,
+    React.createElement('span',null,123)
+    ))
+    root.render(myDiv)
+</script>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 提供了React库的核心对象 React -->
+    <script src="./lib/react.development.js"></script>
+    <!-- 
+        提供了ReactDOM对象，用来操作DOM的
+        DOM三个单词都是大写的
+    -->
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <!-- react对象要操作dom的根节点 -->
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    console.log(React);
+    console.log(ReactDOM);
+    /**
+     * create 创建
+     * Root 根
+     */
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    // 表演
+    root.render('我是夏洛');
+</script>
+</html>

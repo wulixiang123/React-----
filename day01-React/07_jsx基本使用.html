@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    const myDiv = <div>111</div>;
+    console.log(myDiv);
+
+    const myBox = (
+        <div>
+            <h1>我是h1</h1>
+            <p>
+                <span>我是span</span>
+            </p>    
+        </div>
+    )
+
+    root.render(myBox)
+    root.render(myDiv)
+</script>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         *  虚拟dom和真实dom区别
+         * 
+         *  1. 服务器响应html文件给前端，浏览器解析器就会生成一个Dom树
+         *  2.           css 文件  前端，浏览器css解析器会生成 css的渲染树
+         *  3.           js  文件  前端，浏览器js解析器会解析js代码。
+         * 
+         *  js    
+         *     oDiv.style.width = 100
+         *     oDiv.style.height = 200
+         *     oDiv.style.color = 'red'
+         * 
+         *  当js 改变元素标签的几何属性的时候，就会导致浏览器的重排和重绘
+         *  什么是几何属性？ 宽度、高度、边框、位置。。。。
+         *  几何属性的改变，不光影响自身dom元素，还会影响其他元素，导致受影响的元素也要进行重排和重绘
+         *  重新计算位置的过程叫做重排，重排之后重新渲染叫做重绘
+         *     
+         *  重排必然导致重绘，重绘不一定会重排
+         * 
+         *  直接操作真实dom的问题，就是会导致大量重排和重绘
+         *  
+         *  虚拟DOM
+         *  1. 本质就是一个对象
+         *  2. 该对象非常的轻量，属性很少，只有渲染所需的属性
+         *  3. 虚拟dom 可以转化为真实dom
+         *  4. react元素 <==> 虚拟dom
+         *  5. react中如何创建虚拟dom
+         *     5-1. React.createElement 
+         *     5-2. jsx 创建
+         *  6. 虚拟dom 的属性和真实dom 的属性一一对应
+         * 
+         */
+    </script>
+    <div id="root">123123</div>
+    <script>
+        /**
+         * 真实dom 是一个大对象
+         */
+        // 真实dom元素，不一定在页面里有对应的渲染
+        const oDiv = document.getElementById('root');
+        console.dir(oDiv);
+
+        const newDiv = document.createElement('div');// 真实dom
+        newDiv.innerHTML = 'newDiv'
+        console.dir(newDiv);
+        document.body.appendChild(newDiv);// 真实dom渲染到页面
+    </script>
+</body>
+</html>
