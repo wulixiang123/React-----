@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,12 +7,11 @@
     <script src="./lib/react-dom.development.js"></script>
     <script src="./lib/babel.min.js"></script>
 </head>
-
 <body>
     <div id="root"></div>
 </body>
 <script type="text/babel">
-    /**
+     /**
      * js表达式和js语句区别？
      * js表达式是有值的，可以用变量接收，也可以使用console打印，js语句是没有值的
      * 
@@ -31,38 +29,73 @@
      *         数组：将数组中的每一个元素挨个遍历渲染
      *         函数 正则....
      * 2. 三元表达式
-     * 3. 逻辑运算表达式： 5 && 8  false || 18    
+     * 3. 逻辑运算表达式： 5 && 8  false || 18   
+     *  
+     *    整个表达式的值 = 表达式1 && 表达式2
+     *           1. 如果表达式1的布尔值为真，那么整个表达式的值就是表达式2的值
+     *           2. 如果表达式1的布尔值为假，那么整个表达式的值就是表达式1的值
+     * 
+     *    整个表达式的值 = 表达式1 || 表达式2
+     *           1. 如果表达式1的布尔值为真，那么整个表达式的值就是表达式1的值
+     *           2. 如果表达式1的布尔值为假，那么整个表达式的值就是表达式2的值
+     * 
      * 4. 函数调用
      * 
      * jsx语法中的插值表达式 
      * 1. 语法： {js表达式}
      * 
      */
+
+
     const root = ReactDOM.createRoot(document.querySelector("#root"));
-    let num = 90; // 变量 num 数字
+    let num = 90;// 变量 num 数字
+    function fn(){
+        console.log('fn');
+    }
+
+    function fn2(){
+        return 100;
+    }
     root.render((
         <div>
             <h3>基本数据类型</h3>
-            <p>字符串: {'123'}</p>
-            <p>数字: {num}</p>
+            <p>字符串{'111'}</p>
+            <p>数字{num}</p>
             <h3>布尔值</h3>
-            <p>true： {true}</p>
-            <p>false {false}</p>
+            <p>真:{true}</p>
+            <p>假:{false}</p>
             <h3>null</h3>
             <p>null:{null}</p>
             <h3>undefined</h3>
             <p>undefined:{undefined}</p>
 
-            <h3>引用数据类型</h3>
+            <h3>引用数据类型[只能填数组,其它都报错或警告]</h3>
             {/*<p>对象: {{name:'atguigu',age:19}}</p>   对象直接报错*/}
 
             {//
             }
-            <h3>数组：</h3>
-            <p>数组：{[1,2,3,4]}</p>
 
+            <h3>数组:</h3>
+            <p>数组1:{[1,2,3,4]}</p>
+            {/*
+                报错：因为挨个遍历渲染时，发现是对象，报错
+                <p>数组2：{[{id:1,title:'吃饭', isDone:false},{id:2,title:'睡觉', isDone:false}]}</p>
+            */}
+            {/* 函数也会警告
+             <p>函数: {function fn(){console.log(123)}}</p>
+            */}
+
+            <h3>逻辑表达式</h3>
+            <p>{5 && 8}</p>
+            <p>{0 || 1}</p>
+
+            <h3>三元表达式</h3>
+            <p>{1 == '1' ? '真':'假'}</p>
+
+            <h3>函数调用</h3>
+            <p>{fn()}</p>
+            <p>{fn2()}</p>
         </div>
     ))
 </script>
-
 </html>
