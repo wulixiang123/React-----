@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="fn()">点击</button>
+    <a href="http://baidu.com" onclick="go(event)">百度</a>
+
+    <input type="text" name = 'username' onchange="change(event)">
+    <input type="text" name = 'age' oninput="input(event)">
+    <script>
+        function fn(e){
+            console.log(e);//undefined
+            console.log('this:',this);//window 事件回调函数的调用者是window
+        }
+
+        function go(e){
+            console.log(e);
+            console.log('去百度');
+            e.preventDefault();//阻止默认行为
+            console.log('this:',this);//window 事件回调函数的调用者是window
+        }
+
+        /**
+         * onchange事件调用时机：文本框内容改变，并且失去了焦点
+         * 
+         * 事件对象： Event对象
+         */
+        function change(e){
+            console.log('onchange下的e:',e);
+            console.log('onchange:',e.target.value);
+        }
+         /**
+         * oninput 调用时机：文本框内容改变即调用
+         * 
+         * 事件对象：InputEvent
+         */
+        function input(e){
+            console.log('oninput下的e:',e);
+            console.log('oninput:',e.target.value);
+        }
+    </script>
+</body>
+</html>
