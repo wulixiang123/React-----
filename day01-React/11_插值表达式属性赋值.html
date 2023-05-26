@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+
+    let height = 100;
+
+    let styles = {
+        width:200,
+        height:200
+    }
+    root.render((
+        <div width={100} height={100}>
+            <img width={100} height={height} src="https://images.unsplash.com/photo-1534043464124-3be32fe000c9?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&ixid=MnwxfDB8MXxyYW5kb218MHx8YW5pbWFsfHx8fHx8MTY4NTA4NDczNw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500" alt=""></img>
+
+            <img width={styles.width} height={styles.height} src="https://images.unsplash.com/photo-1534043464124-3be32fe000c9?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&ixid=MnwxfDB8MXxyYW5kb218MHx8YW5pbWFsfHx8fHx8MTY4NTA4NDczNw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500" alt=""></img>
+
+            <img {...styles} src="https://images.unsplash.com/photo-1534043464124-3be32fe000c9?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&ixid=MnwxfDB8MXxyYW5kb218MHx8YW5pbWFsfHx8fHx8MTY4NTA4NDczNw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500" alt=""></img>
+        </div>
+    ))
+</script>
+</html>
