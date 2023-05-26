@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+
+    <style>
+        .c1{
+            color: green;
+        }
+        .bg{
+            background:skyblue;
+        }
+        .border1{
+            border: 1px solid red;
+        }
+        .wh{
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+
+    let classNameStr1 = 'c1';
+    let classNameStr2 = 'c1 bg border1 wh';
+    let classNameArr = ['c1','bg','border1','wh'];
+    // 如果数组出现在标签内，当做子元素渲染，将数组元素拿出来挨个渲染
+    // 如果数组出现在标签属性上，当做属性渲染，那么数组元素挨个渲染中间用,隔开
+    root.render((
+        <div>
+            <div className = {classNameStr1}>111</div>
+            <div className = {classNameStr2}>222</div>
+
+            <div className = {classNameArr}>数组</div>
+            <div className = {classNameArr.join(' ')}>数组</div>
+        </div>
+    ))
+</script>
+</html>
