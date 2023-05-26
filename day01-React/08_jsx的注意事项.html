@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    /**
+     * jsx 使用来创建react元素[虚拟dom] ，最终会转化为正式dom并渲染到页面
+     * 所以：
+     *   jsx 可以写的标签名有两种类型
+     *   1. 标签名全小写：html的标签，最终会解析为真实的html标签
+     *   2. 标签名首字母大写：会当做 React组件 进行处理
+     *
+     * 
+     */
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    // const oDiv = (
+    //     <user>
+    //         <name>atguigu</name>
+    //     </user>
+    // )
+    // root.render(oDiv) // 可以渲染，但是有警告：标签名浏览器不认识
+
+    const oBox = ( // 将User当做组件来处理的，因为没有定义该组件，所以报错了
+        <User></User>
+    )
+
+    root.render(oBox)
+</script>
+</html>
