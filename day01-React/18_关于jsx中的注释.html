@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    root.render((
+        <div>
+            <h3>单行注释</h3>
+            {//尖括号需要占据两行
+            }
+            <h3>多行注释</h3>
+            {/*推荐这种注释~~~*/}
+            <h3>属性注释</h3>
+            <div /*id='box' className='c1'*/>我是div</div>
+        </div>
+    ))
+</script>
+</html>

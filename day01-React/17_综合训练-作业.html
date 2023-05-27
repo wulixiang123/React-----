@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        a{
+            text-decoration: none;
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    const list = [
+  { id: 1, name: 'jack', content: 'rose, you jump i jump', time: '03:21' },
+  { id: 2, name: 'rose', content: 'jack, you see you, one day day', time: '03:22' },
+  { id: 3, name: 'tom', content: 'jack,。。。。。', time: '03:23' },
+  { id: 4, name: 'aa', content: '', time: '03:23' }
+];
+
+    function fn1(e,item){
+        e.preventDefault()
+        console.log(e);
+        alert(item.time)
+    }
+    root.render((
+        <div>
+            <ul>
+                {list.map(item=>(
+                    <li key={item.id}><h3 style={{fontSize:25}}>用户:{item.name}</h3>
+                        <a href="" onClick={(e)=>fn1(e,item)}><p style={{fontSize:20}} key={item.id}>{item.content}</p></a></li>
+                ))}
+            </ul>
+        </div>
+    ))
+</script>
+</html>
