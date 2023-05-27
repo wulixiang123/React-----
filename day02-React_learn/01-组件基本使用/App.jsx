@@ -1,4 +1,5 @@
-import ClassTest from "./components/ClassState";
+import ClassTest from "./components/ClassTest";
+import FunTest from "./components/FunTest";
 
 function App() {
     return (
@@ -6,6 +7,8 @@ function App() {
             <h3>App</h3>
             <hr />
             <ClassTest/>
+            <hr/>
+            <FunTest/>
         </>
     );
 }
