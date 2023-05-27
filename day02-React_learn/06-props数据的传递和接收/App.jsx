@@ -10,20 +10,12 @@ import Son from "./components/Son";
  *     this.props属性接收父组件传递的数据
  * 
  * 
- * 在类组件中，如果父组件重新render渲染了，那么子组件也会无条件重新render渲染
  */
 
 class App extends React.Component{
   state = {
     count:1,
     msg:'atguigu'
-  }
-  // 1. 父组件中定义方法
-  addCount(num){
-    console.log('num:',num);
-    this.setState({
-      count:this.state.count + num
-    })
   }
   render(){
     let {count,msg} = this.state;
@@ -32,14 +24,7 @@ class App extends React.Component{
         <h3>App</h3>
         <p>state count:{count}</p>
         <p>state msg:{msg}</p>
-        
-        <p><button onClick={()=>{
-          this.setState({
-            count:100
-          })
-        }}>count++</button></p>
         <hr />
-        {/**2. 通过标签属性将方法传递给子组件 */}
         <Son count={count} msg = {msg} school = '尚硅谷'/>
       </>
     )

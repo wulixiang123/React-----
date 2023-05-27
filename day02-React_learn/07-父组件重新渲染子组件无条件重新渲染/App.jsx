@@ -18,13 +18,6 @@ class App extends React.Component{
     count:1,
     msg:'atguigu'
   }
-  // 1. 父组件中定义方法
-  addCount(num){
-    console.log('num:',num);
-    this.setState({
-      count:this.state.count + num
-    })
-  }
   render(){
     let {count,msg} = this.state;
     return(
@@ -39,7 +32,6 @@ class App extends React.Component{
           })
         }}>count++</button></p>
         <hr />
-        {/**2. 通过标签属性将方法传递给子组件 */}
         <Son count={count} msg = {msg} school = '尚硅谷'/>
       </>
     )
