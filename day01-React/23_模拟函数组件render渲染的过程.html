@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    function Header(){
+        return(
+            <div>我是Header组件</div>
+        )
+    }
+
+    function reader(Com,root){
+        console.dir(Com);
+        const vdom = Com.type();
+        console.log('vdom:',vdom);
+
+        const realDom = document.createElement(vdom.type);
+        realDom.innerHTML = vdom.props.children;
+        root.appendChild(realDom);
+    }
+    const rootDom = document.querySelector('#root')
+    reader(<Header/>,rootDom)
+</script>
+</html>
