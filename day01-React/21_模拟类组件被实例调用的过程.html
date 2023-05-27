@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    // 创建类组件
+    class Header extends React.Component{
+        render(){
+            return(
+                <div>Header 组件</div>
+            )
+        }
+    }
+    // root.render(<Header/>)
+
+    function render(Com,root){
+        console.dir(Com);
+        const instance = new Com.type();//实例化类组件
+        console.log(instance);// Header的实例对象
+        const vdom = instance.render();// 调用render方法
+        console.log(vdom);
+
+        const realDom = document.createElement(vdom.type);// 创建真实dom节点
+        realDom.innerHTML = vdom.props.children;// 添加内容
+        root.appendChild(realDom);//渲染到页面
+    }
+    let rootDom = document.querySelector('#root');
+    render(<Header/>,rootDom);
+</script>
+</html>

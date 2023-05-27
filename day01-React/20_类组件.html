@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    /***
+     * 组件：
+     * 页面中组成整体的一个独立的部分，包括【html + css + js + 静态资源】
+     * 1. 类组件[16.4]：
+     *    - 类组件的定义
+     *    1-1. 类组件本质上就是一个 类，类名首字母大写，类名就是组件名
+     *    1-2. 类组件必须继承 React.Component 类
+     *    1-3. 类组件必须要有render方法
+     *    1-4. render方法中必须有 return，return的内容 99%都是react元素
+     *    - 类组件的调用：使用jsx语法
+     *    1-1. 单标签调用：<组件名/>
+     *    1-2. 对标签调用：<组件名></组件名>
+     *    - 使用组件标签调用发生了什么？
+     *    1. 发现组件调用标签后，会查找该组件的定义
+     *    2. 如果是类组件，会实例化该类组件，产生一个该类组件的实例化对象
+     *    3. 使用该实例化对象调用 render方法
+     *    4. render函数中的return返回值会替换掉 组件调用标签
+     * 
+     * 2. 函数组件[16.8 hook]：
+     * 
+     */
+
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    // 类组件
+    class Header extends React.Component{
+        render(){
+            console.log('Header render 的this指向":',this);//this指向Header,因为在React中,类组件Header会默认帮你new一个对象
+            return(
+            <div className='header'>
+                我是header
+            </div>
+            )
+        }
+    }
+    root.render((
+        <>
+            <Header/>
+            <div className='content'>
+                我是content
+            </div>
+            <div className='footer'>
+                我是footer
+            </div>
+        </>
+    ))
+</script>
+</html>
