@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    // 写法一
+    // root.render((
+    //     <React.Fragment>
+    //         <div>11</div>
+    //         <span>22</span>
+    //         <p>33</p>
+    //     </React.Fragment>
+    // ))
+
+    // // 写法二
+    // const {Fragment} = React;
+    // root.render((
+    //     <Fragment>
+    //         <div>11</div>
+    //         <span>22</span>
+    //         <p>33</p>
+    //     </Fragment>
+    // ))
+
+    // 写法三【推荐】
+    root.render((
+        <>
+        <h3>你会发现React中可以放多个标签了!!!</h3>
+        <div>我是div</div>
+        <p>我是p</p>
+        <span>我是span</span>
+        </>
+    ))
+</script>
+</html>
