@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    /**
+     * 函数组件的定义：
+     *  1. 函数组件本质就是一个函数，函数名首字母大写，函数名就是组件名
+     *  2. 函数组件必须有return语句，并且return的内容 99% 都是react元素
+     * 
+     * 函数组件的调用:
+     *  1. <组件名/>
+     *  2. <组件名></组件名>
+     * 
+     * 函数组件调用执行过程：
+     *  1. 在jsx中发现有首字母大写的标签调用，查找该组件的定义
+     *  2. 发现是函数组件，执行该函数
+     *  3. 函数的返回值替换掉组件标签调用的位置
+     * 
+     */
+
+    function Header(){
+        return(
+        <div>我是Header组件</div>
+        )
+    }
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    root.render((
+        <Header/>
+    ))
+</script>
+</html>
