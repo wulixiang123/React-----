@@ -10,7 +10,7 @@ export default function App() {
             <h3>App</h3>
             <hr />
             {/* 通过标签属性传递数据 */}
-            <Son count={'1'}  getCount={getCount}/>
+            <Son count={1} msg={'啊疼硅谷个'} getCount={getCount}/>
         </div>
     )
 }
