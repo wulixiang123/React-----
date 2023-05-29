@@ -42,7 +42,7 @@ export default class App extends Component {
                     })
                 }}>更新固定值</button></p>
                 <hr />
-                {count % 2 === 0 &&<Son count={count}/>}
+                <Son count={count}/>
             </div>
         )
     }
