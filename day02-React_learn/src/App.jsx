@@ -1,35 +1,22 @@
 import React, { Component } from 'react'
-import './App.css'
+
 export default class App extends Component {
-    state = {
-        index:1
+    // 组件挂载完成之后执行
+    componentDidMount(){
+        console.log('我第三个执行~~~我是componentDidMount');
+        //1. 创建定时器
+        //2. 发送ajax请求
+        //3. 添加自定义事件
+        //4. 订阅消息
     }
-    prev(index){
-        index--;
-        if(index<1){
-            index = 4
-        }
-        this.setState({
-            index
-        })
-    }
-    next(index){
-        index++;
-        if(index>4){
-            index = 1
-        }
-        this.setState({
-            index
-        })
+    constructor(){
+        super()
+        console.log('我第一个执行~~~我是constructor');
     }
   render() {
-    let {index} = this.state
+    console.log('我第二个执行~~~我是render');
     return (
-      <div className='box'>
-        <img src={require(`./assets/images/${index}.webp`)} alt="" />
-        <span onClick={()=>this.prev(index)}>&lt;</span>
-        <span id='right' onClick={()=>this.next(index)}>&gt;</span>
-      </div>
+      <div>App</div>
     )
   }
 }
