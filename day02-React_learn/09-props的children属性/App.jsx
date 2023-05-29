@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import Son from './components/Son'
+import Button from './components/Button'
 
 export default class App extends Component {
   render() {
     return (
       <div>
-        <h3>App</h3>
-        <Son msg={'123'}/>
+        <Button>保存</Button>
+        <Button>取消</Button>
+        <Button>提交</Button>
       </div>
     )
   }

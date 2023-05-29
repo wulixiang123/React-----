@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    const root = ReactDOM.createRoot(document.querySelector("#root"));
+    function fn(a,b,c){
+        console.log('this:',this);//undefined
+        console.log(a);//event对象
+        console.log(b);//2
+        console.log(c);//3
+    }
+    root.render((
+        <div>
+            <button onClick={(e)=>{fn(e,2,3)}}>点击</button>
+        </div>
+    ))
+</script>
+</html>
