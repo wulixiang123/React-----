@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-
+import styles from './index.module.css'
+console.log(styles);
 export default class Header extends Component {
   render() {
     return (
-      <div>index</div>
+      <div className={styles.box}>index</div>
     )
   }
 }
