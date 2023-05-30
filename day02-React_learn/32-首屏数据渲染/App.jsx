@@ -24,25 +24,12 @@ export default class App extends Component {
             }
         ]
     }
-    // 1 父组件中定义方法
-    addTodo(title){
-        console.log('App title: ', title);
-        // 拼接出一个新的todo，添加到todos数组中
-        const todo = {
-            id:nanoid(),
-            title,
-            isDone:false
-        }
-        this.setState({
-            todos:[...this.state.todos,todo]
-        })
-    }
     render() {
         let {todos} = this.state;
         return (
             <div className="todo-container">
                 <div className="todo-wrap">
-                    <Header addTodo={this.addTodo.bind(this)}/>
+                    <Header/>
                     <Main todos={todos}/>
                     <Footer todos={todos}/>
                 </div>
