@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //localStorage 
+        localStorage.setItem('username','lyb')
+        localStorage.setItem('sex','男')
+
+        //sessionStorage
+        sessionStorage.setItem('age',18)
+
+        // 读取
+        let res = localStorage.getItem('username')
+        console.log(res);
+
+        // 删除
+        localStorage.removeItem('username')
+
+        // 全部删除
+        // localStorage.clear();
+
+        // 存储数据类型说明
+        let todos = [
+            {
+                id:1,
+                title:'吃饭',
+                isDone:true
+            }
+        ]
+        // 如果直接把数组对象存入loaclStorage,数据会变成object Object的string类型
+        localStorage.setItem('todos:',todos)
+        let todosStr = localStorage.getItem('todos')
+        console.log('todosStr:',todosStr,typeof todosStr);//[object Object] string
+
+        // 如果要将对象或数组存入localStorage,需要先转化为JSON格式的字符串,再存
+        // 读取恢复数据,JSON.parse还原成原来的数组或对象
+        localStorage.setItem('todos',JSON.stringify(todos))
+
+        let jsonStr = localStorage.getItem('todos');
+        console.log(jsonStr,typeof jsonStr);
+
+        let json = JSON.parse(jsonStr)
+        console.log(json,typeof json);
+        console.log(json[0].title);
+
+        // 当读取一个localStorage中不存在的key的值的时候
+        let result = JSON.parse(localStorage.getItem('dsjbhsjcds'))
+        console.log(result);//null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    </script>
+</body>
+</html>

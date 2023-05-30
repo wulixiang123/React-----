@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         *  定义类的私有属性有两种方式：
+         * 1. 构造函数中定义 this.xxx = xxx;
+         * 2. 直接赋值定义：也相当于是在构造函数中运行定义的
+         * 
+         */
+        class Person{
+            // 定义属性方式2
+            name = 'atguigu'
+            // constructor(){
+            //     this.name = 'atguigu'
+            // }
+            
+            // 在原型上定义的，所有实例共用同一个
+            say(){
+                console.log('say this: ', this);
+            }
+            // 在类的实例对象上定义，每一个实例都有一个自己的
+            eat = ()=>{
+                console.log('eat this: ', this);
+            }
+            // constructor(){
+            //     console.log('constructor this: ' ,this);
+            //     this.eat = ()=>{
+            //         console.log('eat this: ', this);
+            //     }
+            // }
+        }
+        let p1 = new Person();
+        let p2 = new Person();
+        console.log(p1.name);
+        console.log(p1.say === p2.say); // true
+
+        console.log(p1.eat === p2.eat); // false;
+
+
+        let obj = {
+            name:'尚硅谷',
+            fn:p1.eat,
+            f2:p1.say
+        }
+
+        obj.fn();
+
+        obj.f2();
+    </script>
+</body>
+</html>
