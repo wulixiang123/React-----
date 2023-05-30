@@ -894,7 +894,7 @@ function App() {
 export default App;
 ```
 
-##  6-3组件
+##  6-3.组件
 
 ###		6-3-1.类组件
 
@@ -902,9 +902,11 @@ export default App;
 
 > 1. 怎么定义状态数据？
 >
->    就是类组件的一个私有属性 state
+>    就是类组件的一个私有属性 `this.state`
 >
 > 2. 怎么读取状态数据？
+>
+>    `{this.state.count}`
 >
 > 3. 怎么改变状态数据？
 
@@ -968,10 +970,1029 @@ export default ClassState;
 
 修改状态数据及事件回调的this指向问题
 
-> ​	this.setState(新的状态对象)
+> ​	`this.setState(新的状态对象)`
 >
 > react的事件回调函数的调用者是 window，所以要想让事件回调函数中的this指向当前组件的实例对象，有以下手段：
 >
 > 1. bind[推荐]：通过bind改变this指向，原理：使用的是render中的this
 > 2. 包裹箭头函数[推荐]：原理：也是使用的render中的this
 > 3. 直接定义成箭头函数[不推荐]：原理：使用的是constructor中的this
+> 4. 直接给state赋值修改，虽然可以改变状态数据，但是无法触发视图重新渲染【没有触发render函数再调用】
+
+```jsx
+import React, {Component} from 'react'
+class ClassState extends Component{
+    // 定义状态的方式二
+    state = {
+        count:1001,
+        msg:'atguigu'
+    }
+    addCount(){// 
+        // console.log('addCount this: ', this);
+        // this.state.count += 1; // 直接给state赋值修改，虽然可以改变状态数据，但是无法触发视图重新渲染【没有触发render函数再调用】
+        // console.log(this.state.count);
+
+        // this.stateState
+        this.setState({
+            count: this.state.count + 1
+        })
+        /**
+         * 事件回调函数 this指向问题：
+         * 
+         * 1. bind
+         * 2. 包裹箭头函数
+         * 
+         * 3. 直接定义成箭头函数[不推荐]
+         * 
+         * 推荐原则：
+         * 1. 性能：是否多占用了内存空间
+         * 2. 是否可以传参
+         * 
+         */
+    }
+
+    addCount2 = ()=>{
+        this.setState({
+            count: this.state.count + 1
+        })
+    }
+    render(){
+        console.log('render run');
+        console.log('this.state: ',this.state);
+        let {count, msg} = this.state;// 先解构在使用
+        return (
+            <div>
+                <h3>Class 类组件 的状态数据的读取</h3>
+                <p>count: {this.state.count} - {count}</p>
+                <p>msg: {this.state.msg} - {msg}</p>
+
+                <p><button onClick={this.addCount.bind(this)}>count + </button></p>
+                <p><button onClick={()=>this.addCount()}>count + </button></p>
+                <p><button onClick={this.addCount2}>count + </button></p>
+            </div>
+        )
+    }
+}
+export default ClassState;
+```
+
+类组件事件回调的this指向问题
+
+```jsx
+import React, { Component } from 'react'
+
+export default class ClassState extends Component {
+    state = {
+        count: 99,
+        msg: '尚硅谷'
+    }
+
+    constructor() {
+        super();
+        this.click3 = this.click3.bind(this);
+    }
+    click1() {
+        // this.setState 运行后会产生两个严重后果
+        // 1. 状态数据被改变了
+        // 2. render函数重新调用
+
+        // 报错：原因是事件的回调函数是 window调用的，所以this本身在严格模式下是指向undefined
+        this.setState({
+            count: this.state.count + 1
+        })
+    }
+    click2(a,b,c) {
+        // 因为使用bind，使得this用的是render中的this，render中this永远指向当前实例
+        this.setState({
+            count: this.state.count + 1
+        })
+    }
+    click3() {
+        this.setState({
+            count: this.state.count + 1
+        })
+    }
+    click4(a,b,c) {
+        // onClick={()=>this.click4()}
+        // 箭头函数没有自己的this，使用的是render中的this，所以click4中的this指向当前实例
+        this.setState({
+            count: this.state.count + 1
+        })
+    }
+
+    click5 = () => {
+        // 相当于是在构造函数construtor中执行的，所以使用的是constructor中的this
+        this.setState({
+            count: this.state.count + 1
+        })
+    }
+    render() {
+        console.log('render run');
+        let { count, msg } = this.state;
+        return (
+            <div>
+                <p>count : {count}</p>
+                <p>msg : {msg}</p>
+                <p><button onClick={this.click1}>count+ 有问题的</button></p>
+                <p><button onClick={this.click2.bind(this,1,2,3)}>count + bind </button></p>
+                <p><button onClick={this.click3}>count + bind + constructor</button></p>
+                <p><button onClick={() => this.click4(11,22,33)}>包裹箭头函数</button></p>
+                <p><button onClick={this.click5}>直接定义成箭头函数</button></p>
+            </div>
+        )
+    }
+}
+```
+
+**this.setState修改状态**
+
+> ​	使用方式有两种：
+>
+> 1. 参数是对象：对象就是要设置的最新的状态
+>
+>    ```js
+>    this.setState({
+>        count:this.state.count + 1
+>    })
+>    ```
+>
+> 2. 参数是回调函数：
+>
+>    2-1. 回调函数的参数可以取到最新的状态数据
+>
+>    2-2. 回调函数的返回值，就是设置的最新的状态
+>
+>    2-3. 回调函数是异步调用的
+>
+>    ```js
+>    this.setState(state=>{
+>        return {
+>            count:state.count + 1
+>        }
+>    })
+>    ```
+
+###		6-3-2外部数据props
+
+> ​	组件嵌套会产生父子组件的概念
+>
+> props是父组件传递给子组件的数据
+>
+> 1. 父组件如何传递数据给子组件：在子组件的调用标签上通过属性传递
+> 2. 子组件如何接收父组件传递的数据：在子组件中通过 this.props接收
+>
+> 注意：在类组件中，如果父组件render重新渲染了，子组件无条件也会重新render渲染
+
+父传子
+
+父组件:
+
+```jsx
+import React from 'react'
+import Son from "./components/Son";
+/**
+ *  在一个组件中使用组件调用标签，调用另一个组件，那么就会产生父子组件的概念
+ *  父组件可以给子组件传递数据
+ *  1. 父组件如何传递数据给子组件？
+ *     在子组件的调用标签上，通过属性传递
+ * 
+ *  2. 子组件中如何接收父组件传递的数据
+ *     this.props属性接收父组件传递的数据
+ * 
+ *  在类组件中，如果父组件重新render渲染了，那么子组件也会无条件重新render渲染
+ * 
+ */
+class App extends React.Component {
+    state = {
+        count: 1,
+        msg: 'atguigu'
+    }
+    render() {
+        console.log('App render');
+        let {count, msg} = this.state;
+        return (
+            <>
+                <h3>App</h3>
+                <p>state count: {count}</p>
+                <p>state msg: {msg}</p>
+                <p><button onClick={()=>{
+                    this.setState({
+                        count: 100
+                    })
+                }}>count++</button></p>
+                <hr />
+                <Son count={count} msg={msg} school='尚硅谷'/>
+            </>
+        );
+    }
+
+}
+export default App;
+```
+
+子组件:
+
+```jsx
+import React, { Component } from 'react'
+
+export default class Son extends Component {
+    render() {
+        console.log('Son render');
+        // console.log('this.props: ', this.props); // 接收父组件传递的外部数据
+        let {count, msg} = this.props;
+        return (
+            <div>
+                <h3>Son 子组件</h3>
+                <p>props count: {count}</p>
+                <p>props msg: {msg}</p>
+
+            </div>
+        )
+    }
+}
+```
+
+**props数据是只读属性不能直接修改**
+
+> ​	props数据是父组件传递给子组件的数据，如果直接在子组件中修改了props就会造成跟父组件数据不同步。所以，react给props设置成了只读的。避免不一致情况的出现，如果想要修改，那么需要修改数据源，也就是修改`父组件中的数据`。那么就涉及到了一个新的知识点，`子组件向父组件传递数据`
+
+```jsx
+import React, { Component } from 'react'
+
+export default class Son extends Component {
+    render() {
+        console.log('Son render');
+        // console.log('this.props: ', this.props); // 接收父组件传递的外部数据
+        let {count, msg} = this.props;
+        return (
+            <div>
+                <h3>Son 子组件</h3>
+                <p>props count: {count}</p>
+                <p>props msg: {msg}</p>
+
+                <p><button onClick={()=>{
+                    this.props.count += 1; // 直接修改props数据
+                    // 报错：因为props数据是只读的，不可修改
+                }}>props count++</button></p>
+
+            </div>
+        )
+    }
+}
+```
+
+子传父
+
+> ​	仍然是通过props传递，只不过传递的不是数据，而是一个函数
+>
+> 实现步骤：
+>
+> 1. 在父组件中定义方法，并且改变该方法的this指向，永远指向父组件的实例对象
+> 2. 通过属性将该方法传递给子组件
+> 3. 在子组件中通过props接收该方法
+> 4. 在子组件中调用该方法，并通过实参传递数据
+
+父组件App
+
+```jsx
+import React from 'react'
+import Son from "./components/Son";
+
+class App extends React.Component {
+    state = {
+        count: 1,
+        msg: 'atguigu'
+    }
+    // 1. 父组件中定义方法
+    addCount(num){
+        console.log('num: ', num);
+        this.setState({
+            count: this.state.count + num
+        })
+    }
+    render() {
+        let {count, msg} = this.state;
+        return (
+            <>
+                <h3>App</h3>
+                <p>state count: {count}</p>
+                <p>state msg: {msg}</p>
+                <p><button onClick={()=>{
+                    this.setState({
+                        count: 100
+                    })
+                }}>count++</button></p>
+                <hr />
+                {/**2. 通过标签属性将方法传递给子组件, 并且要改变this指向，指向父组件的实例对象 */}
+                <Son count={count} msg={msg} school='尚硅谷' addCount={this.addCount.bind(this)}/>
+            </>
+        );
+    }
+
+}
+export default App;
+```
+
+子组件 Son.jsx
+
+```jsx
+import React, { Component } from 'react'
+
+export default class Son extends Component {
+    render() {
+        let {count, msg, addCount} = this.props; // 子组件中接收父组件传递的方法addCount
+        return (
+            <div>
+                <h3>Son 子组件</h3>
+                <p>props count: {count}</p>
+                <p>props msg: {msg}</p>
+
+                <p><button onClick={()=>{
+                    this.props.count += 1; // 直接修改props数据
+                    // 报错：因为props数据是只读的，不可修改
+                }}>props count++</button></p>
+                {/** 子组件调用父组件传递的方法，并传递数据 */}
+                <p><button onClick={()=>{
+                    addCount(3)
+                }}>子传父</button></p>
+
+            </div>
+        )
+    }
+}
+```
+
+props限定类型-默认值-必填
+
+类组件：
+
+```jsx
+static propTypes = {
+    // count 必填，并且只能是数组
+    // count:PropTypes.number.isRequired
+    count: PropTypes.number,
+    msg: PropTypes.string.isRequired
+}
+// 2. 设置默认值
+static defaultProps = {
+    count: 100
+}
+```
+
+函数组件: 
+
+###  6-3-3生命周期
+
+> ​	分三个阶段：
+>
+> 1. 挂载：`componentDidMount` 【重要】
+>
+>    时机：组件挂载完成之后执行    1.constructor -> 2.render -> 3.componentDidMount
+>
+>    操作：
+>
+>    ​	1-1. 创建定时器
+>
+>    ​	1-2. 发送ajax请求
+>
+>    ​	1-3. 添加自定义事件
+>
+>    ​	1-4. 订阅消息
+>
+> 2. 更新：`componentDidUpdate`
+>
+>    时机：组件更新后执行
+>
+>    触发执行的三种方式：
+>
+>    ​	2-1. new props
+>
+>    ​	2-2. setState
+>
+>    ​	2-3. forceUpdate
+>
+>    操作：
+>
+>    	1. 发送ajax请求
+>    	1. 操作本地存储
+>
+> 3. 卸载: `componentWillUnmount` 【重要】
+>
+>    时机：组件卸载前执行
+>
+>    操作：
+>
+>    ​	3-1. 关闭定时器
+>
+>    ​	3-2. 解绑自定义事件
+>
+>    ​	3-3. 取消订阅消息
+
+![image-20230530145835003](F:\笔记本~~~~~~~~~~~~~~~~~~~\18-React基础.assets\image-20230530145835003.png)
+
+**生命周期三大阶段**
+
+挂载阶段
+
+> 流程: constructor  ==> render ==> componentDidMount
+>
+> 触发: ReactDOM.render(): 渲染组件元素
+
+更新阶段
+
+> 流程: render  ==>  componentDidUpdate 
+>
+> 触发: setState() , forceUpdate(), 组件接收到新的props
+
+卸载阶段
+
+> 流程: componentWillUnmount
+>
+> 触发: 不再渲染组件
+
+**生命周期钩子**
+
+```
+- constructor: 
+
+  只执行一次: 创建组件对象挂载第一个调用
+
+  用于初始化state属性或其它的实例属性或方法(可以简写到类体中)
+
+- render:
+
+  执行多次: 挂载一次 + 每次state/props更新都会调用
+
+  用于返回要初始显示或更新显示的虚拟DOM界面
+
+- componentDidMount:
+
+  执行一次: 在第一次调用render且组件界面已显示之后调用
+
+  用于初始执行一个异步操作: 发ajax请求/启动定时器等
+
+  应用：
+
+  1. 启动定时器
+  2. 订阅消息
+  3. 发送ajax请求
+
+- componentDidUpdate:
+
+  执行多次: 组件界面更新(真实DOM更新)之后调用
+
+  用于数据变化后, 就会要自动做一些相关的工作(比如: 存储数据/发请求)
+
+  用得少  => 这次我们先简单了解, 后面需要时再深入说
+
+- componentWillUnmount:
+
+  执行一次: 在组件卸载前调用
+
+  用于做一些收尾工作, 如: 清除定时器、取消订阅
+```
+
+`props数据`
+
+> 父组件通过 标签属性传递给函数子组件
+>
+> 函数子组件中通过 形参接收[一般是直接解构]
+
+###	6-3-4.ref
+
+> 作用：在react项目中获取 真实dom元素节点
+>
+> 使用步骤：
+>
+> 1. 创建ref对象：`let ref对象 = React.createRef()`
+> 2. 绑定ref：标签属性绑定  ref={ref对象}
+> 3. 获取dom：ref对象.current获取真实dom
+
+```jsx
+import React, { Component,createRef } from 'react'
+
+export default class App extends Component {
+    // 1. 创建ref对象
+    inputRef = createRef(true)
+    render() {
+        console.log('init ref: ', createRef());// {current:null}
+        return (
+            <div>
+                <h3>App</h3>
+                <p><input type="text" name="" ref={this.inputRef} /></p>
+                <p><button onClick={()=>{
+                    console.log('ref: ', this.inputRef); //{current: input}
+                    console.log('dom:', this.inputRef.current);// input  dom元素
+                    console.log('value: ', this.inputRef.current.value); // input文本框的值
+
+                }}>获取ref对象</button></p>
+            </div>
+        )
+    }
+}
+```
+
+### 6-3-5.非受控组件
+
+> 什么是非受控组件？
+>
+> - 表单的值不受到状态数据的控制
+>
+> 赋值的是 `defaultValue`
+>
+> 非受控组件如何获取最新用户的输入？通过ref
+
+```jsx
+import React, { Component,createRef } from 'react'
+
+export default class FormControl extends Component {
+    state = {
+        username: 'atguigu',
+        pwd: 123123
+    }
+    submitHandler(e) {
+        e.preventDefault();// 阻止form表单提交的默认行为
+        console.log('username: ', this.usernameRef.current.value);
+        console.log('pwd: ', this.pwdRef.current.value);
+    }
+    usernameRef = createRef()
+    pwdRef = createRef()
+    render() {
+        let { username, pwd } = this.state;
+        return (
+            <form onSubmit={this.submitHandler.bind(this)}>
+                <p>用户名：<input type="text" ref={this.usernameRef} name="username" defaultValue={username}  /></p>
+                <p>密码：<input type="text" ref={this.pwdRef} name="pwd" defaultValue={pwd} /></p>
+                <p><button type='submit'>注册</button></p>
+            </form>
+        )
+    }
+}
+```
+
+###		6-3-6.受控组件
+
+> ​	什么是受控组件？
+>
+> - 表单元素的值，受到组件状态数据的控制
+>
+> 组件受控，如果不定义onChange事件回调函数，将变为只读属性。如果希望表单值可以输入修改，需要定义onChange事件回调，并在事件回调函数中获取用户最新的输入，设置给状态数据
+
+```jsx
+import React, { Component } from 'react'
+
+export default class FormControl extends Component {
+    /**
+     *  1. 什么叫受控组件？
+     *     表单元素的值，受到状态数据的控制
+     * 
+     *  - 状态数据如何渲染到表单页面
+     *  - 如何获取最新用户输入的内容
+     */
+    state = {
+        username: 'atguigu',
+        pwd: 123123
+    }
+    submitHandler(e) {
+        e.preventDefault();// 阻止form表单提交的默认行为
+        // 受控组件，数据已经跟状态绑定了，用户最新的输入通过状态数据获取即可
+        console.log('username:', this.state.username);
+        console.log('pwd: ', this.state.pwd);
+    }
+
+    /**
+     * 改变username的值的change函数
+     * 
+     */
+    // changeUsername(e) {
+    //     console.log(e.target.name);
+    //     // 使用用户最新的输入，设置username状态即可
+    //     this.setState({
+    //         [e.target.name]: e.target.value
+    //     })
+    // }
+    // changePwd(e) {
+    //     console.log(e.target.name);
+    //     // 使用用户最新的输入，设置username状态即可
+    //     this.setState({
+    //         [e.target.name]: e.target.value
+    //     })
+    // }
+
+    change(e) {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+    render() {
+        let { username, pwd } = this.state;
+        return (
+            <form onSubmit={this.submitHandler.bind(this)}>
+                <p>用户名：<input type="text" name="username" value={username} onChange={this.change.bind(this)} /></p>
+                <p>密码：<input type="text" name="pwd" value={pwd} onChange={this.change.bind(this)} /></p>
+                <p><button type='submit'>注册</button></p>
+            </form>
+        )
+    }
+}
+```
+
+###		6-3-7.案例练习
+
+> ​	学习目标：学会组件化开发的思路
+>
+> 组件化开发思路：
+>
+> 1. 根据效果图，拆分组件，并完成静态布局
+> 2. 完成首屏数据渲染
+> 3. 完成用户交互操作
+>
+> 组件拆分：
+>
+> 1. Header：文本框
+> 2. Main：列表
+> 3. Item：列表中的每一项
+> 4. Footer：底部
+
+**拆分组件并完成静态页面布局**
+
+> 1. 首先将html内容都拷贝到 App.jsx中。替换class==>className
+> 2. 将css都拷贝到 App.css中
+> 3. 进行调试，让页面能正常呈现和展示
+> 4. 将App.jsx中的结构，拆分到各个组件中
+> 5. 将App.css中的样式，拆分到各个组件的 index.css文件中
+
+App.jsx
+
+```jsx
+import React, { Component } from 'react'
+import './App.css'
+import Footer from './components/Footer/Footer'
+import Header from './components/Header/Header'
+import Main from './components/Main/Main'
+export default class App extends Component {
+    render() {
+        return (
+            <div className="todo-container">
+                <div className="todo-wrap">
+                    <Header/>
+                    <Main/>
+                    <Footer/>
+                </div>
+            </div>
+        )
+    }
+}
+```
+
+src/components/Header/Header.jsx
+
+```jsx
+import React, { Component } from 'react'
+import './index.css'
+export default class Header extends Component {
+    render() {
+        return (
+            <div className="todo-header">
+                <input type="text" placeholder="请输入你的任务名称，按回车键确认" />
+            </div>
+        )
+    }
+}
+```
+
+src/components/Main/Main.jsx
+
+```jsx
+import React, { Component } from 'react'
+import Item from '../Item/Item'
+import './index.css'
+export default class Main extends Component {
+    render() {
+        return (
+            <ul className="todo-main">
+                <Item/>
+                <Item/>
+                <Item/>
+                
+            </ul>
+        )
+    }
+}
+```
+
+src/components/Item/Item.jsx
+
+```jsx
+import React, { Component } from 'react'
+import './index.css'
+export default class Item extends Component {
+    render() {
+        return (
+            <li>
+                <label>
+                    <input type="checkbox" />
+                    <span>xxxxx</span>
+                </label>
+                <button className="btn btn-danger">删除</button>
+            </li>
+        )
+    }
+}
+```
+
+src/components/Footer/Footer.jsx
+
+```jsx
+import React, { Component } from 'react'
+import './index.css'
+export default class Footer extends Component {
+    render() {
+        return (
+            <div className="todo-footer">
+                <label>
+                    <input type="checkbox" />
+                </label>
+                <span>
+                    <span>已完成0</span> / 全部2
+                </span>
+                <button className="btn btn-danger">清除已完成任务</button>
+            </div>
+        )
+    }
+}
+```
+
+**首屏数据渲染**
+
+> ​	两个核心问题：
+>
+> 1. 根据页面效果，分析数据结构
+>
+>    ```js
+>    let todos = [
+>        {id:1,title:'吃饭',isDone:true},
+>        {id:2,title:'睡觉',isDone:false}
+>    ]
+>    // 结论：只要渲染列表，必然是数组，渲染的每一项必然是一个对象
+>    ```
+>
+> 2. 数据应该定义在哪个组件身上
+>
+>    原则：
+>
+>    1. 只有当前组件自身使用，那么定义在组件自己身上
+>    2. 如果数据被多个组件使用，那么定义在他们共同的父级身上。理由是父传子比较方便
+
+**用户交互操作**
+
+> 1. 描述你做了什么，想产生了什么结果
+>
+>    例：文本框中输入内容，按下回车，内容会添加到列表中
+>
+> 2. 将以上描述，拆分成步骤 或 看着描述你能想到哪些技术点
+>
+>    技术点：
+>
+>    1. 获取文本框内容？【ref、e.target.value、受控组件】
+>
+>    2. 按下回车：[onKeyUp]
+>    3. 组件通信：子传父
+
+**删除功能**
+
+> 1. 描述你做了什么，产生了什么结果？
+>
+>    例如：点击删除按钮，将该条记录删除
+>
+> 2. 将描述中的技术点罗列下
+>
+>    1. 删除按钮绑定单击事件
+>    2. 子传父 【孙子传给爷爷-借助父亲】
+
+**修改单条完成状态**
+
+> 1. 描述：点击多选框，改变当前记录的isDone的状态
+> 2. 技术：
+>    1. onChange
+>    2. 子传父 [孙子给爷爷传数据]
+
+##		6-4.函数组件
+
+###		6-4-1.props数据
+
+> 父组件通过 标签属性传递给函数子组件
+>
+> 函数子组件中通过 形参接收[一般是直接解构]
+
+父组件App.jsx
+
+```jsx
+import React from 'react'
+import Son from './components/Son'
+export default function App() {
+    function getCount(count){
+        console.log('App count: ',count);
+    }
+    return (
+        <div>
+            <h3>App</h3>
+            <hr />
+            {/* 通过标签属性传递数据 */}
+            <Son count={1} msg={'啊疼硅谷个'} getCount={getCount}/>
+        </div>
+    )
+}
+```
+
+子组件：components/Son.jsx
+
+```jsx
+import React from 'react'
+
+export default function Son({ count, msg, getCount }) {
+    return (
+        <div>
+            <h3>Son</h3>
+            <p>count: {count}</p>
+            <p>msg: {msg}</p>
+            <p><button onClick={()=>getCount(101)}>sendCount</button></p>
+        </div>
+    )
+}
+```
+
+###		6-4-2.props数据限定类型-必填-默认值
+
+```jsx
+/*
+*  函数名.propTypes
+*  函数名.defaultProps 
+*/
+Son.propTypes = {
+    count: PropTypes.number.isRequired,
+    msg:PropTypes.string
+}
+
+Son.defaultProps = {
+    msg:'尚硅谷'
+}
+```
+
+
+
+
+
+
+
+
+
+##		6-5.css文件处理
+
+> ​	css 分三类：
+>
+> 1. 第三方的css： 比如：bootstrap
+>
+>    文件存放位置：public/*xx  例如 ： public/css/bootstrap.css
+>
+>    引入方式：public/index.html 通过link标签引入
+>
+> 2. 全局样式：
+>
+> 3. 组件私有样式：
+
+###		6-5-1.第三方样式库导入
+
+- 文件存放位置：public/css/bootstrap.css
+
+- 文件导入位置：public/index.html
+
+> ​	导入的路径 必须 是  / ，/ 表示网站的根目录
+
+``<link rel="stylesheet" href="%PUBLIC_URL%/css/bootstrap.css" />`
+
+###		6-5-2.全局样式
+
+> ​	reset css 或者是全局要使用的样式文件
+>
+> 位置：src/index.css  或者是 src/App.css
+>
+> 引入：
+>
+> 1. src/index.css： src/index.js 中 `import './index.css'`引入
+> 2. src/App.css : src/App.jsx中 `import './App.css'`引入
+
+###		6-5-3.组件私有样式
+
+> ​	位置： 组件目录/index.css 
+>
+> 引入：组件中使用 import './index.css' 引入
+>
+> 注意：组件中的同名样式，会产生覆盖冲突
+>
+> css模块化：将css 样式变成 js模块, 避免同名样式冲突被覆盖
+>
+> 1. 样式文件名： `xxx.module.css`
+> 2. 导入：存入js变量中 `import styles from './index.css'`
+> 3. 使用样式: 
+>    1. `className={styles.class类名`}
+>    2. `className={[styles.class类名, '类名'].join(' ')}`
+
+##		6-5.图片处理
+
+> 1. 网络图片：直接填入网络地址即可
+>
+> 2. 本地图片
+>
+>    注意：本地图片必须放在src目录内
+>
+>    2-1. require导入 【可以使用state 动态替换导入路径】推荐!!!!!!!
+>
+>    2-2. import导入 
+
+```jsx
+import React, { Component } from 'react'
+import imgSrc from './assets/images/1.jpg'
+export default class App extends Component {
+    state = {
+        index:1
+    }
+    render() {
+        let {index} = this.state;
+        return (
+            <div>
+                <h3>网络图片</h3>
+                <img src="https://images.unsplash.com/photo-1520808663317-647b476a81b9?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=400&ixid=MnwxfDB8MXxyYW5kb218MHx8YW5pbWFsfHx8fHx8MTY4NTMzOTk2Ng&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500" alt="" />
+                <h3>本地图片-require</h3>
+                <img src={require(`./assets/images/${index}.jpg`)} alt="" />
+                
+                <h3>本地图片-import</h3>
+                <img src={imgSrc} alt="" />
+            </div>
+        )
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 附录：
+
+## 1. day01-day02-知识点小结
+
+```
+1. 虚拟dom 和 真实dom的区别？
+   真实dom 改变几何属性 ==》重排和重绘
+   虚拟dom 
+   1. 就是一个对象
+   2. 是一个轻量级对象，与真实dom的属性一一对应
+   3. 虚拟dom通过render方法，可以渲染成真实dom
+   4. react创建虚拟dom 的方式
+      4-1. React.createElement(tag, props，children1, chlidren2)
+      4-2. jsx
+2. jsx  
+   html 元素标签 <小写字母> 
+   组件          <组件名/>  首字母大写
+   
+   渲染动态数据：==》插值表达式  {js表达式}
+   1. 常量和变量：
+      1-1. 基本数据类型: 
+           不渲染的： true\false\null\undefined
+      1-2. 引用数据类型
+           报错|警告：function  对象
+           数组：遍历渲染   
+   2. 三元表达式
+   3. 逻辑运算表达式
+   4. 函数调用
+   
+   
+3. 条件渲染： {三元表达式}  if...else  封装成函数  &&  ||
+4. 列表渲染：核心原理：将数据的数组通过map映射成 react元素的数组
+5. 文档碎片：jsx中必须返回一个唯一根节点导致标签多一层的问题
+6. 组件：
+   6-1. 类组件
+   		state        this.state.xxx         this.setState({})
+        props      
+             1. 父传子：传的数据
+             2. 子传父：传的是方法【4步】
+                1. 父组件创建方法【this指向父组件的实例对象】
+                2. 通过属性传递给子组件
+                3. 子组件中通过this.props接收
+                4. 子组件中调用该方法，将数据通过调用参数传递
+             3. props不可修改【只读的】
+                
+   6-2. 函数组件
+        本质就是一个函数，但是首子母要大写
+   
+```
+
