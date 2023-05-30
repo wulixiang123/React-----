@@ -7,6 +7,7 @@ export default class Header extends Component {
         //执行到这里就是按的回车
         // 获取文本框内容
         let title = e.target.value.trim();
+        console.log(title)
         if(!title) return ;// 什么都没有输入
         // 3. 接收父组件传递的方法
         let {addTodo} = this.props;
