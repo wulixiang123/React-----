@@ -1,15 +1,11 @@
 import React, { useState } from 'react'
-import Son from './components/Son'
-
+import TimeRunner  from './components/TimeRunner'
 export default function App() {
-    let [age,setAge] = useState(20)
+    let [isShow,setIsShow] = useState(true)
   return (
     <div>
-        <h3>App</h3>
-        <p>App state age:{age}</p>
-        <p><button onClick={()=>setAge(age+1)}>age++</button></p>
-        <hr />
-        <Son/>
+        <button onClick={()=>setIsShow(!isShow)}>切换</button>
+        {isShow&&<TimeRunner/>}
     </div>
   )
 }
