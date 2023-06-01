@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Day & Night 按钮（3D版）</title>
+    
+    <script src="https://unpkg.com/@tweenjs/tween.js@20.0.3/dist/tween.umd.js"></script>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
+          "three/examples/jsm/": "https://unpkg.com/three@0.152.2/examples/jsm/",
+          "three-mesh-bvh": "https://unpkg.com/three-mesh-bvh@^0.5.22/build/index.module.js",
+          "three-bvh-csg": "https://unpkg.com/three-bvh-csg@^0.0.4/build/index.module.js"
+        }
+      }
+    </script>
+    
+    <script type="text/javascript" src="./clouds.js"></script>
+    <script type="text/javascript" src="./stars.js"></script>
+    <script type="module-shim">
+      import * as Three from 'three';
+      import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+      import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+      import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+      import { SUBTRACTION, Brush, Evaluator } from 'three-bvh-csg';
+      
+  
+      const btnW = 10,
+        btnH = 5;
+      const bgW = btnW * 2,
+        bgH = btnH * 2;
+      let buttonState = 0;
+      let buttonAniVal = { val: 0 };
+      let container,
+        camera,
+        scene,
+        renderer,
+        controls,
+        animateFrame,
+        raycaster,
+        pointer,
+        buttonGroup,
+        pointLight,
+        evaluator,
+        brush,
+        resultBrush;
+  
+      let lights = {};
+      let Geometrys = {};
+      let Materials = {};
+      let Meshs = {};
+  
+      var guiData = {
+        x: 0.005,
+        btnCo1: new Three.Color('#201f33'),
+        btnCo2: new Three.Color('#8b9fd7'),
+      };
+      var mouseData = {
+        mouseX: 0,
+        mouseY: 0,
+      };
+      var ballPosition = {
+        x: -btnH / 2, //左-btnH/2 右btnH/2
+        z: btnH * 0.5 + 0.1,
+      };
+
+
+      let blob1 = new Blob([cloudsMtl], {type: 'text/plain'});
+      let blob2 = new Blob([cloudsBlob], {type: 'text/plain'});
+      let blob3 = new Blob([starsMtl], {type: 'text/plain'});
+      let blob4 = new Blob([starsBlob], {type: 'text/plain'});
+      const blobs = {'clouds.mtl': blob1, 'clouds.obj': blob2, 'stars.mtl': blob3, 'stars.obj': blob4};
+      const manager = new Three.LoadingManager();
+      // 使用URL回调初始化加载管理器。
+      const objectURLs = [];
+      manager.setURLModifier( ( url ) => {
+        url = URL.createObjectURL( blobs[ url ] );
+        objectURLs.push( url );
+        return url;
+      } );
+
+
+      console.log(
+        `%c⭐️抖音：可乐鸡翅 💕💗感谢关注！`,
+        "font-size:20px; background:#FFF; color:#0034a6;padding:10px; border: 3px solid #0034a6;border-radius:10px;"
+      );
+      init('canvas')
+      function init (id) {
+        container = document.getElementById(id);
+        let width = container.clientWidth,
+          height = container.clientHeight;
+  
+        scene = new Three.Scene();
+
+        /** 背景图添加方式，本地涉及跨域问题，这里就先隐藏了 **/
+        /* const loader = new Three.CubeTextureLoader();
+        loader.setPath('./');
+        const bgTexture1 = loader.load([
+          'posx.jpg',
+          'negx.jpg',
+          'posy.jpg',
+          'negy.jpg',
+          'posz.jpg',
+          'negz.jpg',
+        ]);
+        bgTexture1.colorSpace = Three.SRGBColorSpace;
+        scene.background = bgTexture1; */
+        /** 背景图添加方式，本地涉及跨域问题，这里就先隐藏了 **/
+
+        scene.rotation.y = 1.6;
+  
+        camera = new Three.PerspectiveCamera(45, width / height, 1, 100);
+        camera.position.x = 30;
+        camera.position.y = 0;
+        camera.position.z = 0;
+        camera.lookAt(scene.position);
+  
+        renderer = new Three.WebGLRenderer();
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(width, height);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+  
+        controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.1; //阻尼
+  
+        raycaster = new Three.Raycaster();
+        pointer = new Three.Vector2(-2, -2); //初始化在[-1,1]以外
+  
+        evaluator = new Evaluator();
+        evaluator.useGroups = false;
+  
+        addThings();
+        addLight(); //+光源
+        animate();
+        initEventListen();
+  
+      };
+  
+      let clickState = '';
+      function initEventListen () {
+        container.addEventListener('pointermove', onPointerMove);
+        container.addEventListener(
+          'mousedown',
+          () => {
+            clickState = 'down';
+          },
+          false,
+        );
+        container.addEventListener(
+          'mousemove',
+          () => {
+            clickState = '';
+          },
+          false,
+        );
+        container.addEventListener(
+          'mouseup',
+          () => {
+            if (clickState == 'down') {
+              clickState = '';
+              onPointClick();
+            }
+          },
+          false,
+        );
+        window.addEventListener('resize', onWindowResize);
+      };
+      function onPointerMove (event) {
+        if (event.isPrimary === false) return;
+        mouseData.mouseX = event.clientX - container.offsetLeft;
+        mouseData.mouseY = event.clientY - container.offsetTop;
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop; //在container中的位置要考虑scroll
+  
+        // 将鼠标位置归一化为设备坐标。x 和 y 方向的取值范围是 (-1 to +1)
+        pointer.x =
+          (mouseData.mouseX / container.clientWidth) * 2 - 1;
+        pointer.y =
+          -((mouseData.mouseY + scrollTop) / container.clientHeight) * 2 + 1;
+      };
+      function onPointClick () {
+        toggleTween();
+      };
+      function onWindowResize () {
+        let width = container.clientWidth,
+          height = container.clientHeight;
+  
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+  
+        if (renderer) {
+          renderer.setSize(width, height);
+        }
+      };
+  
+      function addLight () {
+        lights.ambiLigth = new Three.AmbientLight(0xffffff, 0.8);
+        scene.add(lights.ambiLigth);
+  
+        lights.pointLight = new Three.PointLight(0xffffff, 5, 5); //intensity, distance, decay
+        lights.pointLight.position.set(0, 0, 2);
+        scene.add(lights.pointLight);
+  
+        lights.directLight = new Three.DirectionalLight(0xffffff, 0.6); //intensity
+        lights.directLight.position.set(-10, 10, 25);
+        lights.directLight.castShadow = true;
+        lights.directLight.shadow.radius = 6; //设置阴影贴图模糊度
+        scene.add(lights.directLight);
+      };
+  
+      function addThings () {
+        /** 接收平面 **/
+        const geometry = new Three.PlaneGeometry(bgW, bgH);
+        const material = new Three.MeshBasicMaterial({ color: 0xffff00 });
+        Meshs.raycasterPlatform = new Three.Mesh(geometry, material);
+        Meshs.raycasterPlatform.visible = false;
+        scene.add(Meshs.raycasterPlatform);
+        /** 接收平面 **/
+  
+        buttonGroup = new Three.Group();
+        addRoundedRectShape();
+        addBall();
+        addClouds();
+        addStars();
+      };
+  
+      function addRoundedRectShape () {
+        const trackShape = new Three.Shape();
+        (function roundedRect(ctx, x, y, width, height) {
+          //创建跑道形shape，两边圆半径 = height/2
+          const radius = height * 0.5;
+          const w = width > height ? width - height : 0; //中间部分宽度
+          ctx.moveTo(x + radius, y + height);
+          ctx.lineTo(x + radius + w, y + height);
+          ctx.absarc(
+            x + radius + w,
+            y + radius,
+            radius,
+            Math.PI / 2,
+            -Math.PI / 2,
+            true,
+          );
+          ctx.lineTo(x + radius, y);
+          ctx.absarc(
+            x + radius,
+            y + radius,
+            radius,
+            -Math.PI / 2,
+            Math.PI / 2,
+            true,
+          );
+        })(trackShape, 0, 0, btnW, btnH);
+  
+        const extrudeSettings = {
+          depth: btnH * 0.05,
+          bevelEnabled: true,
+          bevelSegments: 10,
+          steps: 1,
+          bevelSize: btnH * 0.05,
+          bevelThickness: btnH * 0.05,
+        };
+  
+        let geometry = new Three.ExtrudeGeometry(trackShape, extrudeSettings);
+        Materials.btnMaterial = new Three.MeshPhongMaterial({
+          color: guiData.btnCo1,
+          wireframe: false,
+        });
+        Materials.btnMaterial.shininess = 10;
+        const mesh = new Three.Mesh(geometry, Materials.btnMaterial);
+        mesh.receiveShadow = true;
+        mesh.castShadow = true;
+  
+        buttonGroup.add(mesh);
+        buttonGroup.position.set(-btnW * 0.5, -btnH * 0.5, 0);
+        scene.add(buttonGroup);
+      };
+      function addBall () {
+        Geometrys.ballGeometry = new Three.SphereGeometry(btnH * 0.37, 20, 20);
+        Materials.ballMaterial = new Three.ShaderMaterial({
+          uniforms: {
+            val: { value: 0.0 },
+            color1: {
+              value: new Three.Color('#fae2c4'),
+            },
+            color2: {
+              value: new Three.Color('#8360af'),
+            },
+            color3: {
+              value: new Three.Color('#a1a2d9'),
+            },
+            color1_1: {
+              value: new Three.Color('#e66739'),
+            },
+            color2_1: {
+              value: new Three.Color('#eb9846'),
+            },
+            color3_1: {
+              value: new Three.Color('#ffe5ae'),
+            },
+          },
+          vertexShader: `
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+            }
+          `,
+          fragmentShader: `
+            uniform vec3 color1;
+            uniform vec3 color2;
+            uniform vec3 color3;
+            uniform vec3 color1_1;
+            uniform vec3 color2_1;
+            uniform vec3 color3_1;
+            uniform float val;
+            varying vec2 vUv;
+            void main() {
+              float y = vUv.y;
+              // 发光的强度
+              float glowIntensity = 1.5;
+  
+              vec3 co1 = mix(color1.rgb * glowIntensity, color1_1.rgb * glowIntensity, val);
+              vec3 co2 = mix(color2.rgb * glowIntensity, color2_1.rgb * glowIntensity, val);
+              vec3 co3 = mix(color3.rgb * glowIntensity, color3_1.rgb * glowIntensity, val);
+              vec3 gradientColor;
+              if (y <= 0.5) {
+                gradientColor = mix(co1, co2, y * 2.0);
+              } else {
+                gradientColor = mix(co2, co3, y * 2.0 - 1.0);
+              }
+              gl_FragColor = vec4(gradientColor, 1.0);
+            }
+          `,
+        });
+        Meshs.ball = new Brush(
+          Geometrys.ballGeometry,
+          Materials.ballMaterial,
+        );
+  
+        brush = new Brush(
+          new Three.CylinderGeometry(btnH * 0.32, btnH * 0.32, btnH * 2, 40),
+          Materials.ballMaterial,
+        );
+        brush.position.set(-btnW * 0.16, btnH * 0.18, 0);
+        brush.rotation.set(0.5 * Math.PI, 0, 0);
+        brush.updateMatrixWorld();
+      };
+      function addClouds () {
+        let mtlLoader = new MTLLoader(manager);
+        mtlLoader.load('clouds.mtl', (materials) => {
+          materials.preload();
+          let objLoader = new OBJLoader(manager);
+          objLoader.setMaterials(materials);
+          objLoader.load(
+            'clouds.obj',
+            (object) => {
+              object.traverse((child) => {
+                if (child instanceof Three.Mesh) {
+                  child.material.shininess = 0.001;
+                  child.material.reflectivity = 0.1;
+                  object.receiveShadow = true;
+                  object.castShadow = true;
+                }
+              });
+              object.position.set(-2, 0, 1);
+              object.receiveShadow = true;
+              object.castShadow = true;
+              Meshs.clouds = object;
+              scene.add(Meshs.clouds);
+              document.querySelector('h2').style.display = 'none';
+            },
+            (xhr) => {
+              // console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+            },
+            (error) => {
+              // console.log(error);
+            },
+          );
+        });
+      };
+      function addStars () {
+        let mtlLoader = new MTLLoader(manager);
+        mtlLoader.load('stars.mtl', (materials) => {
+          materials.preload();
+          let objLoader = new OBJLoader(manager);
+          objLoader.setMaterials(materials);
+          objLoader.load(
+            'stars.obj',
+            (object) => {
+              object.traverse((child) => {
+                if (child instanceof Three.Mesh) {
+                  child.material.shininess = 0.001;
+                  child.material.reflectivity = 0.1;
+                  object.receiveShadow = true;
+                  object.castShadow = true;
+                }
+              });
+              object.position.set(2, 0, 1);
+              object.receiveShadow = true;
+              object.castShadow = true;
+              Meshs.stars = object;
+              scene.add(Meshs.stars);
+              document.querySelector('h2').style.display = 'none';
+            },
+            (xhr) => {
+              // console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+            },
+            (error) => {
+              // console.log(error);
+            },
+          );
+        });
+      };
+  
+      function updateCSG () {
+        resultBrush = evaluator.evaluate(
+          Meshs.ball,
+          brush,
+          SUBTRACTION,
+          resultBrush,
+        );
+        resultBrush.material = Materials.ballMaterial; //useGroups = false，重新上材质
+        resultBrush.castShadow = true;
+        resultBrush.receiveShadow = true;
+        scene.add(resultBrush);
+      };
+  
+      function toggleTween (callback) {
+        buttonState = buttonState == 0 ? 1 : 0;
+        const tween = new TWEEN.Tween(ballPosition)
+          .to(
+            {
+              x: buttonState == 1 ? btnH / 2 : -btnH / 2,
+              z: btnH * 0.5 + 0.1,
+            },
+            800,
+          )
+          .start()
+          .onComplete(() => {
+            if (callback) {
+              callback();
+            }
+          });
+        tween.easing(TWEEN.Easing.Back.InOut);
+  
+        const tweeen2 = new TWEEN.Tween(buttonAniVal)
+          .to({ val: buttonState }, 800)
+          .easing(TWEEN.Easing.Quadratic.InOut)
+          .onUpdate((res) => {
+            Materials.ballMaterial.uniforms.val.value = res.val;
+          })
+          .start();
+      };
+  
+      function animate () {
+        animateFrame = requestAnimationFrame(animate);
+        render();
+        TWEEN.update();
+        controls.update();
+      };
+      function render () {
+        if (!renderer) {
+          return;
+        }
+  
+        raycaster.setFromCamera(pointer, camera);
+        renderer.setClearColor(
+          'hsl(248.57, 11.86%, ' + (23 + buttonAniVal.val * 20) + '%)',
+          1.0,
+        );
+        // 射线
+        const intersects = raycaster.intersectObjects(
+          [Meshs.raycasterPlatform],
+          false,
+        );
+        if (intersects[0]) {
+          const x = intersects[0].uv.x;
+          const y = intersects[0].uv.y;
+          const posX = (x - 0.5) * bgW;
+          const posY = (y - 0.5) * bgH;
+          lights.pointLight.position.x = posX;
+          lights.pointLight.position.y = posY;
+        }
+  
+        updateCSG();
+        Meshs.ball.rotation.set(0, 0, buttonAniVal.val - 2);
+        Meshs.ball.position.set(ballPosition.x, 0, ballPosition.z);
+        Meshs.ball.updateMatrixWorld();
+        const sca = buttonAniVal.val * 0.8;
+        if (Meshs.clouds) {
+          Meshs.clouds.scale.set(sca, sca, sca);
+        }
+        const sca1 = (1 - buttonAniVal.val) * 0.5;
+        if (Meshs.stars) {
+          Meshs.stars.scale.set(sca1, sca1, sca1);
+        }
+  
+        Materials.btnMaterial.color.set(
+          new Three.Color().lerpColors(
+            guiData.btnCo1,
+            guiData.btnCo2,
+            buttonAniVal.val,
+          ),
+        );
+  
+        /** lights **/
+        lights.pointLight.intensity = 5 - buttonAniVal.val * 0.8;
+        lights.directLight.intensity = 0.6 + buttonAniVal.val * 0.2;
+        /** lights **/
+  
+        scene.backgroundBlurriness = 0.4 - buttonAniVal.val * 0.25; //模糊
+        scene.backgroundIntensity = 0.2 + buttonAniVal.val * 0.8; //亮度
+  
+        renderer.render(scene, camera);
+      };
+    </script>
+  </head>
+  <body>
+    <h2>加载中。。。</h2>
+    <div id="canvas" class="button"></div>
+  </body>
+  <style type="text/css">
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    h2 {
+      text-align: center;
+      margin: 100px 0;
+    }
+    .button {
+      width: 100%;
+      height: 800px;
+    }
+  </style>
+</html>
