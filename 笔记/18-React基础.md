@@ -898,7 +898,7 @@ export default App;
 
 ###		6-3-1.类组件
 
-类组件状态数据state
+**类组件状态数据state**
 
 > 1. 怎么定义状态数据？
 >
@@ -910,7 +910,7 @@ export default App;
 >
 > 3. 怎么改变状态数据？
 
-类组件状态数据的定义和读取
+**类组件状态数据的定义和读取**
 
 > 类组件的状态数据定义在它的私有属性 state上
 >
@@ -942,7 +942,7 @@ class ClassState extends Component{
 export default ClassState;
 ```
 
-定义状态的方式二
+**定义状态的方式二**
 
 ```jsx
 import React, {Component} from 'react'
@@ -968,7 +968,7 @@ class ClassState extends Component{
 export default ClassState;
 ```
 
-修改状态数据及事件回调的this指向问题
+**修改状态数据及事件回调的this指向问题**
 
 > ​	`this.setState(新的状态对象)`
 >
@@ -1036,7 +1036,7 @@ class ClassState extends Component{
 export default ClassState;
 ```
 
-类组件事件回调的this指向问题
+**类组件事件回调的this指向问题**
 
 ```jsx
 import React, { Component } from 'react'
@@ -1143,7 +1143,7 @@ export default class ClassState extends Component {
 >
 > 注意：在类组件中，如果父组件render重新渲染了，子组件无条件也会重新render渲染
 
-父传子
+**父传子**
 
 父组件:
 
@@ -1241,7 +1241,7 @@ export default class Son extends Component {
 }
 ```
 
-子传父
+**子传父**
 
 > ​	仍然是通过props传递，只不过传递的不是数据，而是一个函数
 >
@@ -1322,7 +1322,7 @@ export default class Son extends Component {
 }
 ```
 
-props限定类型-默认值-必填
+**props限定类型-默认值-必填**
 
 类组件：
 
@@ -1777,6 +1777,31 @@ export default class Footer extends Component {
 >    1. onChange
 >    2. 子传父 [孙子给爷爷传数据]
 
+##		6-4.todos数据持久化保存-localStorage
+
+> 将数据存储在localStorage中，如果数据有变化，重写localStorage中的数据
+
+```jsx
+state = {
+    todos:[]
+}
+componentDidMount(){
+    this.setState({
+        todos: JSON.parse(localStorage.getItem('todos')) || []
+    })
+}
+
+componentDidUpdate(){
+    localStorage.setItem('todos', JSON.stringify(this.state.todos));
+}
+```
+
+纯组件 `PureComponent`
+
+> 类组件继承 Component的类组件，状态数据没有变化，外部数据也没有变化，执行setState也会重新渲染
+>
+> 纯组件：PureComponent, 当state 和 props没有变化的时候，不会重新render
+
 ##		6-4.函数组件
 
 ###		6-4-1.props数据
@@ -1841,9 +1866,231 @@ Son.defaultProps = {
 
 
 
+###		6-4-3.hook函数
 
+**useState**
 
+> ​	作用：useState: 让函数组件拥有状态
+>
+> 语法：let [状态数据,设置状态的函数] = useState(状态初始值)
+>
+> 例如: let [count, setCount] = useState(10)
+>
+> setCount(新状态值)  <font color='red'>改变的是useState中缓存的 count值</font>
+>
+> 1. 设置新的状态数据值
+> 2. 会触发页面更新[函数组件会被重新调用]
 
+基本使用
+
+```jsx
+import React, { useState } from 'react'
+export default function App() {
+    // let res = useState(10);
+    // console.log('res: ', res); // [10, f]
+    let [count, setCount] = useState(10);
+    return (
+        <div>
+            <p>state count : {count}</p>
+            <p><button onClick={()=>{
+                setCount(count + 1)
+            }}>count+</button></p>
+        </div>
+    )
+}
+```
+
+setXxx函数的两种用法
+
+> 1. setXxx(直接写值)
+>
+> 2. setXxx(回调函数)
+>
+>    > 作用：通过回调函数的参数，获取最新的状态数据[因为产生闭包后，只能获取到初始值]
+>    >
+>    > 原理：参数可以是一个回调函数，回调函数的参数能够获取到 useState中缓存的最新的状态值
+>    >
+>    > 回调函数的返回值，就是设置的最新的 msg状态值
+
+产生闭包只能获取初始值的原理图：
+
+![image-20230531135211990](F:\笔记本~~~~~~~~~~~~~~~~~~~\18-React基础.assets\image-20230531135211990.png)
+
+```jsx
+import React, { useEffect, useState } from 'react'
+
+export default function App() {
+    let [msg, setMsg] = useState('atguigu')
+    useEffect(()=>{
+        setTimeout(()=>{
+            //setMsg(msg + '-');// 说明此处的msg 只能取到初始值 atguigu
+            // 方式二：回调函数写法
+            /**
+             * setMsg 参数可以是一个回调函数，回调函数的参数能够
+             * 获取到 useState中缓存的最新的状态值，
+             * 回调函数的返回值，就是设置的最新的 msg状态值
+             */
+            setMsg((msg)=>{
+                return msg + '-'
+            })
+        },2000)
+    },[])
+    
+    return (
+        <div>
+            <p>msg: {msg}</p>
+            <p><button onClick={()=>{
+                setMsg(msg + '+')
+            }}>msg + '+'</button></p>
+        </div>
+    )
+}
+```
+
+ useEffect
+
+> ​	作用：让函数组件拥有类组件的生命周期
+>
+> 语法：
+>
+> ```jsx
+> useEffect(()=>{
+> 
+> }[,[监听的state或props]])
+> ```
+
+```jsx
+import React, { useEffect, useState } from 'react'
+/**
+ * 在一个函数组件中 useEffect 可以使用多次，都会被执行
+ */
+export default function Son({ age }) {
+    let [count, setCount] = useState(10)
+    let [msg, setMsg] = useState('atguigu');
+    // 1. 相当于是 componentDidMount
+    useEffect(() => {
+        console.log('111');
+    }, [])
+    // useEffect 可以使用多次
+    useEffect(() => {
+        console.log('222');
+    }, [])
+    // 2. 相当于是 componentDidMount + componentDidUpdate[state-count, props-age]
+    useEffect(() => {
+        console.log('count change');
+    }, [count, age])
+
+    // 3. 相当于是 componentDidMount + componentDidUpdate 【所有的state和所有的props】
+    useEffect(() => {
+        console.log('look at all state + props')
+        return () => { // componentWillUnmount
+            console.log('组件即将卸载')
+        }
+    })
+
+    // 4. componentWillUnmount
+    useEffect(() => {
+        return () => { // componentWillUnmount
+            console.log('组件即将卸载')
+        }
+    }, [])
+    return (
+        <div>
+            <h4>Son</h4>
+            <p>Son state count: {count}</p>
+            <p>Son state msg: {msg}</p>
+            <p>Son props age: {age}</p>
+            <p><button onClick={() => setCount(count + 1)}>count++</button></p>
+            <p><button onClick={() => setMsg(msg + '!')}>msg !</button></p>
+        </div>
+    )
+}
+```
+
+电子时钟案例练习
+
+```jsx
+import React, { useEffect, useState } from 'react'
+import moment from 'moment'
+export default function TimeRunner() {
+    let [nowTime, setNowTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
+
+    useEffect(()=>{// componentDidMount
+        let timer = setInterval(()=>{
+            console.log('111');
+            setNowTime(moment().format('YYYY-MM-DD HH:mm:ss'))
+        },1000)
+        return ()=>{// componentWillUnmount
+            clearInterval(timer)
+        }
+    },[])
+
+    return (
+        <div>
+            <p>当前时间是： {nowTime}</p>
+        </div>
+    )
+}
+```
+
+ useRef
+
+> 作用：创建一个ref对象, 一般用来绑定react元素，获取真实dom元素
+>
+> 语法:  `let xxRef = useRef(初始值);// xxRef :  {current: 初始值}`  
+
+基本使用
+
+```jsx
+import React, { useRef } from 'react'
+export default function App() {
+    let inputRef = useRef('sdkfj')
+    // console.log('inputRef: ', inputRef);//{current: 'sdkfj'}
+    return (
+        <div>
+            <input type="text" name="" id="" ref={inputRef}/>
+            <button onClick={()=>{
+                console.log('inputRef: ', inputRef);
+                console.log('dom: ', inputRef.current);
+                console.log('value: ', inputRef.current.value);
+            }}>get Ref</button>
+        </div>
+    )
+}
+```
+
+受控组件
+
+```jsx
+import React, { useState } from 'react'
+
+export default function FormControl() {
+    let [username,setUsername] = useState('atguigu');
+    let [pwd, setPwd] = useState('123123')
+    const changeUsername= (e)=>{
+        setUsername(e.target.value);
+    }
+    const changePwd= (e)=>{
+        setPwd(e.target.value);
+    }
+
+    const save = (e)=>{
+        e.preventDefault();
+        console.log('username: ', username);
+        console.log('pwd: ', pwd);
+    }
+    return (
+        <div>
+            <form onSubmit={save}>
+                <p>姓名: <input type="text" name="username" value={username} onChange={changeUsername}/></p>
+
+                <p>密码: <input type="text" name="pwd" value={pwd} onChange={changePwd}/></p>
+                <p><button>保存</button></p>
+            </form>
+        </div>
+    )
+}
+```
 
 
 
@@ -1994,5 +2241,68 @@ export default class App extends Component {
    6-2. 函数组件
         本质就是一个函数，但是首子母要大写
    
+```
+
+##		2.本地存储
+
+> localStorage ： 本地存储，不会随着浏览器的关闭而消失
+>
+> sessionStorage: 会话存储，浏览器或当前会话窗口关闭，数据消失
+>
+> 以上无论哪种数据都是存储在浏览中的，数据只能存基本数据类型
+>
+> Api                          localStorage                                        sessionStorage
+>
+> 存储：    localStorage.setItem(key, value)                    sessionStorage.setItem(key, value)  
+>
+> 读取：   localStorage.getItem(key)                               sessionStorage.getItem(key)
+>
+> 删除：   localStorage.removeItem(key)                       sessionStorage.removeItem(key)
+>
+> 全部删除：localStorage.clear()                                    sessionStorage.clear()
+
+```jsx
+localStorage.setItem('username', 'yuonly');
+localStorage.setItem('sex','girl');
+// sessionStorage.setItem('age', 100);
+
+// 读取
+let res = localStorage.getItem('username')
+console.log(res);
+
+// 删除
+// localStorage.removeItem('username');
+
+// 全删
+localStorage.clear();
+
+// 存储数据类型说明
+let todos = [
+    {
+        id:1,
+        title:'吃饭',
+        isDone:true
+    }
+]
+// 如果直接把数组对象存入 localStorage，数据会变成一个 object Object的字符串
+// localStorage.setItem('todos', todos);
+// let todosStr = localStorage.getItem('todos');
+// console.log(todosStr, typeof todosStr);  // [object Object] string
+
+// 如果要将对象或数组存入localStorage ，需要先转化为Json格式的字符串，在存
+// 读取恢复数据，JSON.parse 还原成原来的数组或对象
+
+localStorage.setItem('todos', JSON.stringify(todos));
+
+let jsonStr = localStorage.getItem('todos'); // string
+console.log(jsonStr, typeof jsonStr);
+
+let json = JSON.parse(jsonStr);
+console.log(json, typeof json);
+console.log(json[0].title);
+
+// 当读取一个localStorage中不存在的key的值的时候
+let result = JSON.parse(localStorage.getItem('sdjfkljlk'))
+console.log(result);
 ```
 
