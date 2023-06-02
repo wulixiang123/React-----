@@ -17,7 +17,8 @@ const App = () => {
       title,
       isDone: false,
     };
-    setTodos([todo, ...todos]); //首先取到用户输入的todo,然后展开todos
+    // setTodos([...todos,todo]); //使用...获取到todos的所有值,并向后追加todo
+    setTodos([todo, ...todos]); //使用...获取到todos的所有值,并向前追加todo
   };
 
   const checkOne = (todo) => {
