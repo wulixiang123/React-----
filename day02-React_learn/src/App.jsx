@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import request from './http'
-export default function App() {
-    let [loading,setLoading] = useState('false')
-    let [repo,setRepo] = useState({});
-    useEffect(()=>{
-        async function getRepo(){
-            setLoading(true)
-            let{items} = await request.get('/search/repositories',{
-                params:{
-                    q:'vue',
-                    'sort':'stars'
-                }
-            })
-            setRepo(items[0])
-            setLoading(false)
-        }
-        getRepo()
-    },[])
-  return (
-    <div>
-        {loading?<div>loading...</div>:(<div>most popular repo is <a href={repo.html_url}>{repo.name}</a></div>)}
-    </div>
-  )
+import React, { useState } from 'react'
+import context from './context'
+import './App.css'
+import Footer from './components/Footer/Footer'
+import Header from './components/Header/Header'
+import Main from './components/Main/Main'
+const App = () => {
+    let [todos, setTodos] = useState([
+        { id: Math.random().toString(36).slice(2), title: '吃饭', isDone: true },
+        { id: Math.random().toString(36).slice(2), title: '睡觉', isDone: false },
+        { id: Math.random().toString(36).slice(2), title: '打豆豆', isDone: false }
+    ])
+    return (
+        <context.Provider value={todos}>
+            <div className="todo-container">
+                <div className="todo-wrap">
+                    <Header />
+                    <Main />
+                    <Footer />
+                </div>
+            </div>
+        </context.Provider>
+    )
 }
+export default App;

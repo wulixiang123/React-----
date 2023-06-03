@@ -1,2 +1,4 @@
+// 1.从react中解构出createContext
 import { createContext } from "react";
-export default createContext()//别忘了加括号调用!!!
+// 2.暴露出去别忘记加()调用
+export default createContext()

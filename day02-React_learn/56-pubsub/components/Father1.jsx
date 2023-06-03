@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react'
+import Son1 from './Son1'
 import PubSub from 'pubsub-js'
-import Son1 from './Son1';
 export default function Father1() {
   useEffect(()=>{
-    let fanId = PubSub.subscribe('fanfan',(msg,data)=>{
-      console.log('Father1 mag:',msg);
-      console.log('Father1 data:',data);
+    let fanId = PubSub.subscribe('fanfan',(msg,data)=>{//mag消息名,data是数据
+      console.log('msg:',msg,'data:',data);
     })
-    return ()=>{
-      PubSub.unsubscribe(fanId)
+    return () => {
+      PubSub.unsubscribe(fanId)//取消订阅
     }
-  })
+  },[])
   return (
     <div>
-      <h3>Father1</h3>
+      <h2>Father1</h2>
       <Son1/>
     </div>
   )
