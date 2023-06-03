@@ -6,6 +6,7 @@ class ClassState extends Component{
         count:1000,
         msg:'atguigu'
     }
+    
     addCount(){
         // console.log('addCount的this指向:',this);
         // this.state.count += 1;// 直接给state赋值修改，虽然可以改变状态数据，但是无法触发视图重新渲染【没有触发render函数再调用】
