@@ -8,6 +8,7 @@ import { Suspense, lazy } from "react";
 
 const About = lazy(()=>import('../pages/About'))
 const Message = lazy(()=>import('../pages/Message'))
+const Detail = lazy(()=>import('../pages/Detail'))
 
 function load(Com){// 懒加载封装
     return(
@@ -27,7 +28,13 @@ const routes = [// 1. 配置路由表
             },
             {
                 path:'message',
-                element:load(Message)
+                element:load(Message),
+                children:[
+                    {
+                        path:'detail/:id/:school',
+                        element:load(Detail)
+                    }
+                ]
             },
             {
                 path:'/home',
