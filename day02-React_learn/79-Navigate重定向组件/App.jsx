@@ -1,10 +1,9 @@
 import React from 'react'
-import { Routes, Route, NavLink, Link, Navigate } from 'react-router-dom'
+import { Routes, Route, NavLink, Link,Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import User from './pages/User'
 import './App.css'
-import PageNotFound from './pages/PageNotFound'
 export default function App() {
     return (
         <div>
@@ -31,7 +30,7 @@ export default function App() {
             <hr />
             <ul>
                 <li><NavLink className={(obj) => {
-                    console.log('className', obj)
+                    // console.log('className', obj)
                     return obj.isActive ? 'myselfActive' : ''
                 }} to='/login'>登录</NavLink></li>
                 <li><NavLink className={({isActive}) => isActive ? 'myselfActive' : ''} to='/user'>用户中心</NavLink></li>
@@ -46,12 +45,10 @@ export default function App() {
                 <Route path='/login' element={<Login />}></Route>
                 <Route path='/home' element={<Home />}></Route>
                 <Route path='/user' element={<User />}></Route>
-
-                <Route path='/' element={<Navigate to='/home'/>}></Route>
-                <Route index={true}element={<Navigate to={'/home'}/>}></Route>
-                <Route index element={<Navigate to='home'/>}></Route>
-
-                <Route path='*'element={<PageNotFound/>}></Route>
+                {/* 重定向配置 */}
+                {/* <Route path='/' element={<Navigate to='/home' />}></Route> */}
+                {/* <Route index={true} element={<Navigate to='/home' />}></Route> */}
+                <Route index element={<Navigate to='/home' />}></Route>
             </Routes>
         </div>
     )
