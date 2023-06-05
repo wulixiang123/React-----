@@ -1,8 +1,9 @@
 import React from 'react'
-import { NavLink,useRoutes } from 'react-router-dom'
-import routes from './routes'
+import { NavLink,useNavigate,useRoutes } from 'react-router-dom'
+import routes from './routes'// 2. 导入路由表
 
 export default function App() {
+    const navigate = useNavigate();// 创建navigate函数
     return (
         <>
             <div className="row">
@@ -16,11 +17,29 @@ export default function App() {
                         <NavLink className='list-group-item' to='/about'>About</NavLink>
                         <NavLink className='list-group-item' to='/home'>Home</NavLink>
                     </div>
+
+                <div>
+                    <button onClick={()=>{
+                        // 编程式导航可以加入js逻辑，进行有条件的跳转
+                        // if(localStorage.getItem('token')) {
+                        //     navigate('/about')
+                        // }
+                        navigate('/about')
+                    }}>About history</button>
+                    <button onClick={()=>{
+                        navigate('/about',{replace:true})
+                    }}>About replace true</button>
+
+                    <button onClick={()=>navigate(1)}>前进</button>
+                    <button onClick={()=>navigate(-1)}>后退</button>
+                    <button onClick={()=>navigate(2)}>前进2步</button>
+                </div>
+
                 </div>
                 <div className="col-xs-6">
                     <div className="panel">
                         <div className="panel-body">
-                          {useRoutes(routes)}
+                          {useRoutes(routes)}{/* 3. 使用useRoutes 激活路由表 */}
                           
                             {/* <Routes>
                                 <Route path='/about' element={<About/>}></Route>

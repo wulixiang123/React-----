@@ -9,8 +9,14 @@ import { Suspense, lazy } from "react";
 const About = lazy(()=>import('../pages/About'))
 const Message = lazy(()=>import('../pages/Message'))
 
-
-const routes = [
+function load(Com){// 懒加载封装
+    return(
+        <Suspense fallback={<div>组件正在加载中...</div>}>
+            <Com/>
+        </Suspense>
+    )
+}
+const routes = [// 1. 配置路由表
     {
         path:'/home',
         element:<Home/>,
@@ -21,9 +27,7 @@ const routes = [
             },
             {
                 path:'message',
-                element:<Suspense fallback={<div>组件正在加载中...</div>}>
-                            <Message/>
-                        </Suspense>
+                element:load(Message)
             },
             {
                 path:'/home',
@@ -33,9 +37,7 @@ const routes = [
     },
     {
         path:'/about',
-        element:<Suspense fallback={<div>组件正在加载中...</div>}>
-                    <About/>
-                </Suspense>
+        element:load(About)
     },
     {
         index:true,
