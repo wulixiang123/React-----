@@ -30,7 +30,7 @@ export default function App() {
             <hr />
             <ul>
                 <li><NavLink className={(obj) => {
-                    console.log('className', obj)
+                    // console.log('className', obj)
                     return obj.isActive ? 'myselfActive' : ''
                 }} to='/login'>登录</NavLink></li>
                 <li><NavLink className={({isActive}) => isActive ? 'myselfActive' : ''} to='/user'>用户中心</NavLink></li>
