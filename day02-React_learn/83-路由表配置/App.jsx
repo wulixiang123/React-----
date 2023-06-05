@@ -1,5 +1,6 @@
 import React from 'react'
-import { NavLink,useRoutes } from 'react-router-dom'
+import { NavLink, useRoutes } from 'react-router-dom'
+// 2. 导入路由表
 import routes from './routes'
 
 export default function App() {
@@ -20,19 +21,8 @@ export default function App() {
                 <div className="col-xs-6">
                     <div className="panel">
                         <div className="panel-body">
-                          {useRoutes(routes)}
-                          
-                            {/* <Routes>
-                                <Route path='/about' element={<About/>}></Route>
-                                <Route path='/home' element={<Home/>}>
-                                    <Route path='/home/news' element={<News/>}></Route>
-                                 
-                                    <Route path='message' element={<Message/>}></Route>
-                                    <Route path='/home' element={<Navigate to='/home/news'/>}></Route>
-                                </Route>
-                                <Route index element={<Navigate to='/home' />} />
-                                <Route path='*' element={<PageNotFound/>}/>
-                            </Routes> */}
+                            {/* 3. 使用useRoutes 激活路由表 */}
+                            {useRoutes(routes)}
                         </div>
                     </div>
                 </div>
