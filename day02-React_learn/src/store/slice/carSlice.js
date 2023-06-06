@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 // 购物车切片
 const carSlice = createSlice({
     name:'Car',//必须写name,Car是每个方法中的type属性
@@ -17,10 +17,42 @@ const carSlice = createSlice({
             }else{//否则+1
                 state.carList[index].buyNum += 1
             }
-            
+        },
+        addBuyNum(state,{payload}){
+            // 思路一：
+            // state.carList = state.carList.map(item=>{
+            //     if(item.id === payload){
+            //         item.buyNum += 1
+            //     }
+            //     return item;
+            // })
+            // 思路二
+            let index = state.carList.findIndex(item=>item.id === payload)
+            state.carList[index].buyNum += 1
         }
-    }
+    },
+    extraReducers:builder=>
+        builder
+            .addCase(asyncDecBuyNum.fulfilled, (state, {payload})=>{
+                state.carList.map(item=>{
+                    if(item.id === payload){
+                        item.buyNum -= 1;
+                        if(item.buyNum <= 0){
+                            alert('已清空')
+                        }
+                    }
+                    return item;
+                })
+            })
 })
 
-export const {addCar} = carSlice.actions//解构方法存到actions中
+export const { addCar,addBuyNum } = carSlice.actions
+
+export const asyncDecBuyNum = createAsyncThunk('car/decBuyNum', (payload)=>{
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=>{
+            resolve(payload)
+        },2000)
+    })
+})
 export default carSlice.reducer
