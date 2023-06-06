@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-     // 3. 包裹跟组件App
+     // 3. 包裹根组件App
     <BrowserRouter>
         <App />
     </BrowserRouter>
