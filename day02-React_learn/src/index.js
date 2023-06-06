@@ -8,9 +8,9 @@ import {createSlice,configureStore} from '@reduxjs/toolkit'//下载并导入
  * 3. 购物车切片： 添加购物车、修改购买数量
  * 
  */
-
+//商品切片
 const goodsSlice = createSlice({
-    name:'goods',//固定写法 count是每一个方法中的type属性
+    name:'goods',//固定写法 goods是每一个方法中的type属性
     initialState:{//数据
         goodsList:[]
     },
@@ -26,6 +26,24 @@ const goodsSlice = createSlice({
 
 const {addGoods} = goodsSlice.actions//解构方法存到actions中
 
+// 购物车切片
+const carSlice = createSlice({
+    name:'Car',//必须写name,Car是每个方法中的type属性
+    initialState:{//数据
+        carList:[]
+    },
+    reducers:{//定义方法的容器,所有方法在此定义
+        addCar(state,{payload}){
+            state.carList = [...state.carList,{
+                ...payload,
+                buyNam:1
+            }]
+        }
+    }
+})
+
+const {addCar} = carSlice.actions//解构方法存到actions中
+
 const store = configureStore({//创建仓库
     reducer:{
         //reducer指定应用程序状态的变化方式。它是一个纯函数，
@@ -40,4 +58,9 @@ store.subscribe(()=>{
 })
 //添加商品
 store.dispatch(addGoods({gname:'小米手机',price:1999}))
-console.log(store.getState().goods.goodsList[0]);
+store.dispatch(addGoods({gname:'华为手机',price:2999}))
+console.log(store.getState().goods.goodsList);
+
+// 添加购物车
+store.dispatch(addCar(store.getState().goods.goodsList[0]))
+store.dispatch(addCar(store.getState().goods.goodsList[1]))
