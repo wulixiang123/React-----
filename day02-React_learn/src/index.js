@@ -1,21 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-//1. 安装 npm i react-router-dom  2. 导入
-import { BrowserRouter } from 'react-router-dom'
-// 导入Provider
-import { Provider } from 'react-redux'
-// 导入store
-import store from './store'
-import App from './App';
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import {createSlice} from '@reduxjs/toolkit'//下载并导入
+const countSlice = createSlice({
+    name:'count',//固定写法 count是每一个方法中的type属性
+    initialState:{//数据
+        num:1
+    },
+    reducers:{//定义方法的容器
+        addNum(state,{payload}){
+            state.num += payload
+        },
+        decNum(state,{payload}){
+            state.num -= payload
+        }
+    }
+})
 
-root.render(
-    <Provider store={store}>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
-    </Provider>
-);
+console.log(countSlice);
 
+const {addNum,decNum} = countSlice.actions//解构方法存到actions中
 
-
+console.log('addNum(1):',addNum(3));
+console.log('decNum(1)',decNum(1));
