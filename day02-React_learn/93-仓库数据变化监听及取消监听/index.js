@@ -1,50 +1,45 @@
-import {createSlice, configureStore} from '@reduxjs/toolkit'
-
+//configureStore是创建仓库的必要条件
+import {createSlice,configureStore} from '@reduxjs/toolkit'//下载并导入
 const countSlice = createSlice({
-    name:'count',
-    initialState:{
-        num:9
+    name:'count',//固定写法 count是每一个方法中的type属性
+    initialState:{//数据
+        num:1
     },
-    reducers:{
-        addNum(state, action){//需求： {type:'count/addNum',payload:undefined}
-            console.log('程序员 addNum 开始干活', action.payload)
-            state.num += action.payload
+    reducers:{//定义方法的容器
+        addNum(state,{payload}){//payload就是实参传过来的值
+            state.num += payload
         },
-        decNum(state, {payload}){
+        decNum(state,{payload}){
             state.num -= payload
         }
     }
 })
 
-const {addNum, decNum} = countSlice.actions;// actionCreator 产品经理  创建需求
+console.log(countSlice);
 
-console.log(addNum(3));//{type: 'count/addNum', payload: 3}
+const {addNum,decNum} = countSlice.actions//解构方法存到actions中
 
-console.log(decNum(5));//{type: 'count/decNum', payload: 5}
+console.log('addNum(3):',addNum(3));
+console.log('decNum(1)',decNum(1));
 
-
-// 创建仓库
-const store = configureStore({
+const store = configureStore({//创建仓库
     reducer:{
         count:countSlice.reducer
     }
 })
+// console.log(store);//store仓库中常用的方法有 1.getState() 2.dispatch
+// console.log(store.getState());
+// console.log(store.getState().count);
+console.log(store.getState().count.num);//获取仓库的数据
 
-// 获取仓库中所有的数据 getState
-console.log(store.getState(), store.getState().count.num);
+store.dispatch(addNum(3))//store仓库中的dispatch方法接收一个方法并执行方法
+console.log(store.getState().count);
 
-// 修改数据  仓库相当于是老板，老板     找      产品经理写一个需求文档，交给程序员干
-//                            store  dispatch  actionCreator   action
-store.dispatch(addNum(3)); // addNum(3) ==> {type:'count/addNum', payload:3}
-store.dispatch(decNum(2));
-console.log(store.getState());
-
-// 监听store仓库所有切片数据的变化，如果有变化，会触发回调函数的执行
-// 返回值是取消监听的函数，函数执行后监听
+//监听store仓库的变化,变化则触发回调
 const unsubscribe = store.subscribe(()=>{
-    console.log(store.getState(),'1111');
+    console.log(store.getState(),'111');
 })
-store.dispatch(addNum(3)); // addNum(3) ==> {type:'count/addNum', payload:3}
-unsubscribe();//取消监听
-store.dispatch(decNum(2));
-
+store.dispatch(addNum(3))
+store.dispatch(decNum(1))
+unsubscribe()//取消监听
+store.dispatch(addNum(100))

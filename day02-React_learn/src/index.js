@@ -34,3 +34,12 @@ console.log(store.getState().count.num);//获取仓库的数据
 
 store.dispatch(addNum(3))//store仓库中的dispatch方法接收一个方法并执行方法
 console.log(store.getState().count);
+
+//监听store仓库的变化,变化则触发回调
+const unsubscribe = store.subscribe(()=>{
+    console.log(store.getState(),'111');
+})
+store.dispatch(addNum(3))
+store.dispatch(decNum(1))
+unsubscribe()//取消监听
+store.dispatch(addNum(100))
