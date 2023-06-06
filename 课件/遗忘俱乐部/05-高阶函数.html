@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 函数嵌套函数、函数的参数是一个函数，函数内部返回一个函数，高阶函数
+         * 
+         * 柯里化函数：函数内部返回一个新的函数
+         */
+
+        function sum(a,b,c){
+            return a + b + c;
+        }
+        console.log(sum(1,2,3));
+
+        function mySum(a){
+            return function (b){
+                return function (c){
+                    return a + b + c;
+                }
+            }
+        }
+
+        console.log(mySum(1)(2)(3));
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let todos = [
+            {
+                id: 1,
+                title: '吃饭',
+                isDone: false
+            },
+            {
+                id: 2,
+                title: '睡觉',
+                isDone: false
+            },
+            {
+                id: 3,
+                title: '打代码',
+                isDone: true
+            },
+        ]
+
+        /**
+         * filter: 过滤
+         * 
+         * filter(回调函数)
+         * filter函数的返回值，过滤后的新数组
+         * 
+         * 回调函数的参数是遍历数组的每一项
+         * 回调函数的返回值，如果布尔值为真，那么 当前这一项就会进入新数组中
+         *                   如果布尔值为假，那么这一项就被过滤掉了，不会进入新数组中
+         */
+
+        let newArr = todos.filter(todo => {
+            // 1. todo  {id:1,title:'吃饭',isDone:false}
+            // 2. todo  {id:2,title:'睡觉',isDone:false}
+            // 3. todo  {id:3,title:'打代码',isDone:false}
+            // console.log(todo);
+
+            // filter 过滤功能的实现，就是用条件判断 我是返回true 还是false
+            // return true;
+            // return false;
+            return !todo.isDone
+        })
+
+        console.log(newArr);
+
+
+        /**
+         *  map: 将原来的数组原素，映射成一个新的元素放入新数组中
+         * 
+         *  map的返回值，是一个跟原数组长度一致的新数组
+         * 
+         *  map(回调函数)
+         *  回调函数的形参：数组遍历时的每一项
+         *  回调函数的返回值，会进入map返回值数组中
+         */
+
+        todos = [
+            {
+                id: 1,
+                title: '吃饭',
+                isDone: false
+            },
+            {
+                id: 2,
+                title: '睡觉',
+                isDone: true
+            },
+            {
+                id: 3,
+                title: '打代码',
+                isDone: true
+            },
+        ]
+        // let id = 3;
+        // let mapNewArr = todos.map(todo=>{
+        //     if(todo.id === id){
+        //         todo.isDone = !todo.isDone
+        //     }
+        //     return todo;
+        // })
+
+        // console.log('mapNewArr: ', mapNewArr)
+
+
+        /**
+         * reduce: 实现数组累计
+         * 
+         * 返回值：最终累计后的结果
+         * 
+         * reduce(回调函数, 起始值)
+         * reduce((pre, cur)=>{
+         *  
+         * }, 起始值)
+         */
+        todos = [
+            {
+                id: 1,
+                title: '吃饭',
+                isDone: false
+            },
+            {
+                id: 2,
+                title: '睡觉',
+                isDone: true
+            },
+            {
+                id: 3,
+                title: '打代码',
+                isDone: true
+            },
+        ]
+
+        let total = todos.reduce((pre, cur) => {
+            // console.log('pre: ', pre); // 第一次循环时，pre就是初始值，以后循环中的值取决于上一次循环 return 的值
+            // console.log('cur: ', cur); // 当前数组遍历的对象
+            // return 100;
+
+            return pre + cur.isDone;
+            // 1. 0 + false ==> 0 + 0 ==> 0; return 0
+            // 2. 0 + true ==> 0 + 1 ==> 1; return 1
+            // 3. 1 + true  ==> 1 + 1 ==> 2; return 2   2 作为reduce的返回值
+        }, 0)
+
+        console.log(total);
+
+
+    </script>
+</body>
+
+</html>
