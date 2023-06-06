@@ -1,5 +1,4 @@
 import React from 'react'
-import store from './store'
 import { addNum } from './store/slice/countSlice'//拿到方法
 import {useSelector,useDispatch} from 'react-redux'//3.解构出俩方法
 
