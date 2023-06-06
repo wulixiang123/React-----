@@ -1,38 +1,31 @@
 import React from 'react'
-import { useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { addGoods } from '../store/slice/goodsSlice';
-
+import {useRef} from 'react'
+import {useDispatch} from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { addGoods } from '../store/slice/goodsSlice'
 export default function AddGoods() {
-    /**
-     * 将商品添加到 store 的 goodsSlice切片的 goodsList数组中
-     */
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const gnameRef = useRef();
-    const priceRef = useRef();
+  const dispatch = useDispatch()//redux框架对react原方法进行封装的方法useDispatch
+  const navigate = useNavigate()//路由的方法配合navigate('/xxx网址')使用
+  const gnameRef = useRef()//获取真实dom
+  const priceRef = useRef()
 
-    const submitHandler = (e)=>{
-        e.preventDefault();// 阻止默认行为
-        // 获取商品名和价格
-        let gname = gnameRef.current.value.trim();
-        let price = +priceRef.current.value.trim();
-        // 调用addGoods的actionCreator
-        dispatch(addGoods({gname,price}))
-        // 清空表单
-        gnameRef.current.value = '';
-        priceRef.current.value = '';
-        // 跳转到商品列表页
-        navigate('/goodslist')
-    }
-    return (
-        <>
-            <form onSubmit={submitHandler}>
-                商品名称: <input type="text" ref={gnameRef} name="" id="" /><br />
-                商品价格: <input type="text" ref={priceRef} name="" id="" /><br />
-                <button>添加商品</button>
-            </form>
-        </>
-    )
+  const submitHandler = (e)=>{
+    e.preventDefault()
+    let gname = gnameRef.current.value.trim()
+    let price = +priceRef.current.value.trim()
+
+    dispatch(addGoods({gname,price}))
+    gnameRef.current.value=''
+    priceRef.current.value=''
+    navigate('/goodslist')
+  }
+  return (
+    <>
+      <form onSubmit={submitHandler}>
+        商品名称: <input type="text" name="" id="" ref={gnameRef}/>
+        商品价格: <input type="text" name="" id="" ref={priceRef}/>  
+        <button>添加商品</button>
+      </form>  
+    </>
+  )
 }

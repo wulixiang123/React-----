@@ -12,10 +12,10 @@ const carSlice = createSlice({
             if(index === -1){//判断数据id是否为假,就是说有没有这个id,如果没有原封不动展示
                 state.carList = [...state.carList,{
                     ...payload,
-                    buyNam:1//购买数量
+                    buyNum:1//购买数量
                 }]
             }else{//否则+1
-                state.carList[index].buyNam += 1
+                state.carList[index].buyNum += 1
             }
             
         }
