@@ -1,10 +1,9 @@
 import {configureStore} from '@reduxjs/toolkit'
-import goods from './slice/goodsSlice'
-import car from './slice/carSlice'
-const store = configureStore({//5.创建仓库
+import count from './slice/countSlice'
+
+const store = configureStore({
     reducer:{
-        goods,
-        car
+        count
     }
 })
-export default store;
+export default store
