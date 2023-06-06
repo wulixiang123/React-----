@@ -1,5 +1,5 @@
 import React from 'react'
-import { addNum ,asyncAddNum,decNum} from './store/slice/countSlice'//拿到方法
+import { addNum ,asyncAddNum,decNum,asyncAddTotal} from './store/slice/countSlice'//拿到方法
 import {useSelector,useDispatch} from 'react-redux'//3.解构出俩方法
 
     /**
@@ -39,6 +39,10 @@ export default function App() {
           let res = dispatch(asyncAddNum(5))
           console.log(res);
         }}>异步的+</button></p>
+
+        <p><button onClick={()=>{
+          dispatch(asyncAddTotal('aa'))
+        }}>异步的＋</button></p>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 // 1.引入createAsyncThunk解决异步操作
 import {createSlice,createAsyncThunk} from '@reduxjs/toolkit'//第一步,引入切片
+import { getTotal } from '../../api/github'
 // count切片
 const countSlice = createSlice({
     name:'count',//固定写法 goods是每一个方法中的type属性
@@ -42,6 +43,11 @@ export const asyncAddNum = createAsyncThunk('count/addNum',(payload)=>{
             // reject('error')
         }, 2000);
     })
+})
+// 异步发送请求或取total值，然后进行 + 
+export const asyncAddTotal = createAsyncThunk('count/addTotal', async (payload)=>{
+    let {total_count} = await getTotal(payload)
+    return total_count
 })
 
 export default countSlice.reducer
