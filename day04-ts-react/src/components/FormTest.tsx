@@ -26,7 +26,7 @@ export default function FormTest() {
                     label="Username"
                     name="username"
                     /**表单校验规则 required 必填 message 不符合规则的提示信息 */
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+                    rules={[{ required: true, message: '请输入您的用户名!' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -34,7 +34,7 @@ export default function FormTest() {
                 <Form.Item
                     label="Password"
                     name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
+                    rules={[{ required: true, message: '请输入您的密码!' }]}
                 >
                     <Input.Password />
                 </Form.Item>

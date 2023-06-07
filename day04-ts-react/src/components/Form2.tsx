@@ -1,15 +1,16 @@
 import React from 'react'
 import { Form, Input, Checkbox, Button } from 'antd'
 export default function Form2() {
-    // 1. 创建一个form对象
+    // 1. 创建一个form对象 对表单数据进行交互
     const [form] = Form.useForm();
 
     const onFinish = (values: any) => {
-        // 3. 获取表单数据
+        // console.log('Success:', values);也可以获取表单数据
+        // 3. 获取表单数据 为什么要用这个呢?
         console.log(form.getFieldsValue());
     };
     /**
-     * 清空表单数据的回调
+     * 5.清空表单数据的回调
      */
     const clear = ()=>{
         form.resetFields(); // 恢复到初始值的状态，如果没有初始值，就是直接清空
@@ -20,7 +21,7 @@ export default function Form2() {
     return (
         <div>
             <h3>Form</h3>
-            {/* 2.绑定form对象到Form组件 */}
+            
             <Form
                 name="basic"
                 labelCol={{ span: 8 }}
@@ -28,7 +29,7 @@ export default function Form2() {
                 style={{ maxWidth: 600 }}
                 // initialValues={{ remember: true, username: 'atguigu', password: '123123' }}
                 onFinish={onFinish}
-                form={form}
+                form={form}//2.绑定form对象到Form组件
             >
                 <Form.Item
                     label="Username"
@@ -54,6 +55,7 @@ export default function Form2() {
                     <Button block type="primary" htmlType="submit">
                         Submit
                     </Button>
+                    {/* 4. 可以定义方法将其中的值清空*/}
                     <Button onClick={clear}>清空</Button>
                 </Form.Item>
             </Form>
