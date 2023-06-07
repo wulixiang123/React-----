@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-
+import ButtonTest from './components/ButtonTest';
+import DividerTest from './components/DividerTest';
+import RowTest from './components/RowTest';
+import LayoutTest from './components/LayoutTest';
+import SpaceTest from './components/SpaceTest';
+import PageTest from './components/PageTest';
+import FormTest from './components/FormTest';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+           {/* <ButtonTest/> */}
+           {/* <DividerTest/> */}
+           {/* <RowTest/> */}
+           {/* <LayoutTest/> */}
+           {/* <SpaceTest/> */}
+           {/* <PageTest/> */}
+           <FormTest/>
     </div>
   );
 }
