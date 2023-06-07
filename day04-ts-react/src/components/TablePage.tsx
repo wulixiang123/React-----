@@ -2,7 +2,7 @@
 import { Button, Space, Table } from 'antd';
 import {DeleteOutlined,EditOutlined} from '@ant-design/icons'
 import { ColumnsType } from 'antd/es/table';
-import { ITodoItem, ITodos } from '../api/todos/model/todosTypes';
+import { ITodoItem, ITodos } from '../api/users/model/todosTypes';
 
 export default function TableTest() {
     const columns:ColumnsType<ITodoItem> = [

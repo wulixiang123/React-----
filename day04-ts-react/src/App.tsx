@@ -15,6 +15,7 @@ import TableTest from './components/TableTest';
 import TableType from './components/TableType'
 import TablePage from './components/TablePage'
 import TableState from './components/TableState'
+import TableAxios from './components/TableAxios';
 export default function App() {
     return (
         <div>
@@ -31,7 +32,8 @@ export default function App() {
            {/* <TableTest/> */}
            {/* <TableType/> */}
            {/* <TablePage/> */}
-           <TableState/>
+           {/* <TableState/> */}
+           <TableAxios/>
         </div>
     )
 }
