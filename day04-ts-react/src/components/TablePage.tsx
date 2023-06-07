@@ -64,13 +64,15 @@ export default function TableTest() {
         rowKey={'id'}
         dataSource={todos}
         columns={columns}
+        /** 分页功能 pagination */
+        // pagination={false}  不显示分页器
         pagination={{
-            current:1,
-            pageSize:2,
-            total:30,
-            showSizeChanger:true,
-            pageSizeOptions:[5,10,20],
-            showQuickJumper:true,
+            current:1,//当前页
+            pageSize:2,//每页显示几条信息
+            total:30,//总条数
+            showSizeChanger:true,//显示可选每页几条记录的下拉框
+            pageSizeOptions:[5,10,20],//自定义下拉列表
+            showQuickJumper:true,// 显示快速跳转到第几页
             showTotal(total:number){
                 return(
                     <>
