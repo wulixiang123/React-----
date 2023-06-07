@@ -1,4 +1,6 @@
-import './App.css';
+import React from 'react'
+import 'antd/dist/reset.css';
+
 import ButtonTest from './components/ButtonTest';
 import DividerTest from './components/DividerTest';
 import RowTest from './components/RowTest';
@@ -6,18 +8,22 @@ import LayoutTest from './components/LayoutTest';
 import SpaceTest from './components/SpaceTest';
 import PageTest from './components/PageTest';
 import FormTest from './components/FormTest';
-function App() {
-  return (
-    <div>
+import Form2 from './components/Form2';
+import CardTest from './components/CardTest';
+import ConfirmTest from './components/ConfirmTest';
+export default function App() {
+    return (
+        <div>
            {/* <ButtonTest/> */}
            {/* <DividerTest/> */}
            {/* <RowTest/> */}
            {/* <LayoutTest/> */}
            {/* <SpaceTest/> */}
            {/* <PageTest/> */}
-           <FormTest/>
-    </div>
-  );
+           {/* <FormTest/> */}
+           {/* <Form2/> */}
+           {/* <CardTest/> */}
+           <ConfirmTest/>
+        </div>
+    )
 }
-
-export default App;
