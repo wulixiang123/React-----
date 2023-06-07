@@ -6,9 +6,10 @@ import { ITodoItem, ITodos } from '../api/users/model/todosTypes';
 import { useState } from 'react';
 
 export default function TableTest() {
-    let [current,setCurrent] = useState<number>(1)
-    let [pageSize,setPageSize] = useState<number>(2)
-    let [total,setTotal] = useState<number>(10)
+    // 设置分页相关状态
+    let [current,setCurrent] = useState<number>(1)//当前页
+    let [pageSize,setPageSize] = useState<number>(2)//每页显示几条
+    let [total,setTotal] = useState<number>(10)//总条数
 
     const columns:ColumnsType<ITodoItem> = [
         {
@@ -69,6 +70,8 @@ export default function TableTest() {
         rowKey={'id'}
         dataSource={todos}
         columns={columns}
+        /** 分页功能 pagination */
+        // pagination={false}  不显示分页器
         pagination={{
             current,
             pageSize,
@@ -86,9 +89,9 @@ export default function TableTest() {
             onChange(page:number,pageSize:number){
                 console.log('page:',page);
                 console.log('pageSize:',pageSize);
-
-                setCurrent(page)
-                setPageSize(pageSize)
+                
+                setCurrent(page)// 设置当前页
+                setPageSize(pageSize)// 重新设置每页显示几条
             }
         }}
         />

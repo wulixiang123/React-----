@@ -31,8 +31,8 @@ export default function App() {
            {/* <ConfirmTest/> */}
            {/* <TableTest/> */}
            {/* <TableType/> */}
-           <TablePage/>
-           {/* <TableState/> */}
+           {/* <TablePage/> */}
+           <TableState/>
            {/* <TableAxios/> */}
         </div>
     )
