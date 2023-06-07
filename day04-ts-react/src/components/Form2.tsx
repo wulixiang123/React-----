@@ -1,5 +1,6 @@
 import React from 'react'
-import { Form, Input, Checkbox, Button } from 'antd'
+import { Form, Input, Checkbox, Button,Select } from 'antd'
+const {Option} = Select
 export default function Form2() {
     // 1. 创建一个form对象 对表单数据进行交互
     const [form] = Form.useForm();
@@ -49,6 +50,14 @@ export default function Form2() {
 
                 <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
                     <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+
+                <Form.Item label='城市' name='city'>
+                    <Select>
+                        <Option value="beijing">北京</Option>
+                        <Option value="shanghai">上海</Option>
+                        <Option value="shenzhen">深圳</Option>
+                    </Select>
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
