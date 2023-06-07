@@ -24,6 +24,10 @@ export default function CardTest() {
                 </Tag>
                 <Button type='primary' onClick={()=>{
                     message.success('成功');
+                    
+                    //message.success绿色提示
+                    // message.error红色提示
+                    // message.warning黄色提示
                 }}>成功</Button>
                 <Button type='primary' danger onClick={()=>{
                     message.error('失败');
