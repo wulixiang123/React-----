@@ -30,10 +30,10 @@ export default function App() {
            {/* <CardTest/> */}
            {/* <ConfirmTest/> */}
            {/* <TableTest/> */}
-           {/* <TableType/> */}
+           <TableType/>
            {/* <TablePage/> */}
            {/* <TableState/> */}
-           <TableAxios/>
+           {/* <TableAxios/> */}
         </div>
     )
 }

@@ -5,6 +5,8 @@ import { ColumnsType } from 'antd/es/table';
 import { ITodoItem, ITodos } from '../api/users/model/todosTypes';
 
 export default function TableTest() {
+    // ColumnsType是antd/es/table中的一个类型
+    // ITodoItem是根据返回值自定义类型
     const columns:ColumnsType<ITodoItem> = [
         {
             title:'序号',
