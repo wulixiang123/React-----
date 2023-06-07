@@ -13,6 +13,8 @@ import CardTest from './components/CardTest';
 import ConfirmTest from './components/ConfirmTest';
 import TableTest from './components/TableTest';
 import TableType from './components/TableType'
+import TablePage from './components/TablePage'
+import TableState from './components/TableState'
 export default function App() {
     return (
         <div>
@@ -27,7 +29,9 @@ export default function App() {
            {/* <CardTest/> */}
            {/* <ConfirmTest/> */}
            {/* <TableTest/> */}
-           <TableType/>
+           {/* <TableType/> */}
+           {/* <TablePage/> */}
+           <TableState/>
         </div>
     )
 }
