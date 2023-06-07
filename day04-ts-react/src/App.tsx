@@ -11,6 +11,8 @@ import FormTest from './components/FormTest';
 import Form2 from './components/Form2';
 import CardTest from './components/CardTest';
 import ConfirmTest from './components/ConfirmTest';
+import TableTest from './components/TableTest';
+import TableType from './components/TableType'
 export default function App() {
     return (
         <div>
@@ -23,7 +25,9 @@ export default function App() {
            {/* <FormTest/> */}
            {/* <Form2/> */}
            {/* <CardTest/> */}
-           <ConfirmTest/>
+           {/* <ConfirmTest/> */}
+           {/* <TableTest/> */}
+           <TableType/>
         </div>
     )
 }
