@@ -1,9 +1,22 @@
-import { Button, Form, Input, Space } from "antd";
+import { addHospitalSet } from "@/api/hospital/hospitalSet";
+import { IAddHospitalSetParams } from "@/api/hospital/model/hospitalSetTypes";
+import { Button, Form, Input, Space, message } from "antd";
+import { log } from "console";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function AddOrUpdata() {
-    const onFinish = () => {
-
+export default function AddOrUpdate() {
+    const navigate = useNavigate() 
+    const onFinish = (fields:IAddHospitalSetParams) => {
+      console.log(fields);
+      try{
+      addHospitalSet(fields)
+      message.success('添加成功')
+      navigate('/syt/hospital/hospitalSet')
+      }
+      catch(e:any){
+        message.error(e.message)
+      }
     }
   return (
     <>
