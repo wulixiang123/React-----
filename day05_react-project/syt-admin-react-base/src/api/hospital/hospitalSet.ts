@@ -15,11 +15,16 @@ export const getHospitalSetList = ({page,limit,hosname,hoscode}:IHospitalSetPara
 export const addHospitalSet = (data:IAddHospitalSetParams)=>{
     return request.post<any,null>('/admin/hosp/hospitalSet/save', data)
 }
-//根据id删除医院设置
+// 根据id删除医院设置
 export const deleteById = (id:string | number) => {
     return request.delete('admin/hosp/hospitalSet/remove/' + id)
 }
 // 根据id获取医院设置数据
 export const getHospitalSetById = (id:string | number) => {
     return request.get<any,IHospitalSetItem>('/admin/hosp/hospitalSet/get/' + id)
+}
+
+// 更新医院设置数据
+export const updateHospitalSet = (data:IAddHospitalSetParams)=>{
+    return request.put<any,null>('/admin/hosp/hospitalSet/update',data)
 }

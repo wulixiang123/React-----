@@ -16,6 +16,7 @@ export interface IHospitalSetParams {
     apiUrl: string;
     contactsName: string;
     contactsPhone: string;
+    id?:string | number
 }
 /**
  * 医院设置对象类型
