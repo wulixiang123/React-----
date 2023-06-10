@@ -1,12 +1,14 @@
-import { addHospitalSet } from "@/api/hospital/hospitalSet";
+import { addHospitalSet, getHospitalSetById } from "@/api/hospital/hospitalSet";
 import { IAddHospitalSetParams } from "@/api/hospital/model/hospitalSetTypes";
 import { Button, Form, Input, Space, message } from "antd";
-import { log } from "console";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function AddOrUpdate() {
+   const [form] = Form.useForm()
+
     const navigate = useNavigate() 
+    let {id} = useParams()// 获取路由path参数id
     const onFinish = (fields:IAddHospitalSetParams) => {
       console.log(fields);
       try{
@@ -18,9 +20,20 @@ export default function AddOrUpdate() {
         message.error(e.message)
       }
     }
+// 获取编辑医院设置数据
+const _getHospitalSet = async ()=>{
+  let hospitalSet = await getHospitalSetById(id as string);
+  console.log(hospitalSet);
+  form.setFieldsValue(hospitalSet)
+}
+  useEffect(()=>{
+    id && _getHospitalSet()
+  },[])
+
   return (
     <>
       <Form
+        form={form}
         name="basic"
         labelCol={{ span: 3 }}
         wrapperCol={{ span: 21 }}
