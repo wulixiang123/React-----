@@ -3,15 +3,26 @@ import {SearchOutlined} from '@ant-design/icons'
 import React,{useState,useEffect} from 'react'
 import { ColumnsType } from 'antd/lib/table'
 import { IDistrictList, IHospitalItem, IHospitalList } from '@/api/hospital/model/hospitalListType'
-import { getDistrictList, getHospitalList } from '@/api/hospital/hospitalList'
+import { getDistrictList, getHospitalList, toggleState } from '@/api/hospital/hospitalList'
+import { useNavigate } from 'react-router-dom'
 const {Option} = Select
 
 export default function HospitalList() {
+  const navigate = useNavigate()
   const [form] = Form.useForm()
 
   const onFinish = () => {
-    console.log('aaaaa');
+    console.log(form.getFieldsValue());
+    setFields(form.getFieldsValue())// 设置fields 状态
+    setPage(1)//设置页
   }
+
+  // 修改服务器上下线状态
+  const changeState = async (id:string,status:number)=>{
+    await toggleState(id,status);//服务器的数据状态被修改了
+    _getHospitalList()//刷新列表
+  }
+
   const columns:ColumnsType<IHospitalItem> = [
     {
       align:'center',
@@ -34,7 +45,9 @@ export default function HospitalList() {
     },
     {
       title:'等级',
-      dataIndex:'hostype'
+      render(row:IHospitalItem){
+        return row.param.hostypeString
+      }
     },
     {
       title:'详细地址',
@@ -57,9 +70,9 @@ export default function HospitalList() {
       render(row:IHospitalItem){
         return(
           <Space>
-            <Button type='primary'>查看</Button>
+            <Button type='primary' onClick={()=>navigate('/syt/hospital/hospitalList/show/' + row.id)}>查看</Button>
             <Button type='primary'>排班</Button>
-            <Button type='primary'>{row.status ? '下线':'上线'}</Button>
+            <Button type='primary' onClick={()=>changeState(row.id,row.status?0:1)}>{row.status ? '下线':'上线'}</Button>
           </Space>
         )
       }
@@ -76,6 +89,19 @@ export default function HospitalList() {
   let [pageSize,setPageSize] = useState<number>(3)
   let [total,setTotal] = useState<number>(10)
   let [hospitalList,setHospitalList] = useState<IHospitalList>([])
+  // 查询清空状态设置
+  let [fields,setFields] = useState({
+      hosname:undefined,
+      hoscode:undefined,
+      hostype:undefined,
+      provinceCode:undefined,
+      cityCode:undefined,
+      districtCode:undefined,
+      status:undefined
+  })
+
+  // 设置加载状态
+  let [loading,setLoading] = useState<boolean>(false)
 
   const getProvince = async () => {
     let provinceList = await getDistrictList(86)
@@ -115,11 +141,28 @@ export default function HospitalList() {
 
   // 获取医院列表分页数据
   const _getHospitalList = async () => {
-    let {content,totalElements} = await getHospitalList({page,limit:pageSize})
+    setLoading(true)
+    let {content,totalElements} = await getHospitalList({page,limit:pageSize,...fields})
     console.log({content});
     console.log({totalElements});
     setHospitalList(content)
     setTotal(totalElements)
+    setLoading(false)
+  }
+
+  // 清空
+  const clear = async () => {
+    form.resetFields()// 1. form表单的显示要清空
+    setFields({// 2. form状态数据要清空
+      hosname: undefined,
+      hoscode: undefined,
+      hostype: undefined,
+      provinceCode: undefined,
+      cityCode: undefined,
+      districtCode: undefined,
+      status: undefined
+    })
+    page !== 1 && setPage(1)// 3. page设置到第一页
   }
 
   useEffect(()=>{
@@ -129,7 +172,7 @@ export default function HospitalList() {
 
   useEffect(()=>{
     _getHospitalList()
-  },[page,pageSize])
+  },[page,pageSize,fields.hosname,fields.hoscode,fields.hostype,fields.provinceCode,fields.cityCode,fields.districtCode,fields.status])
 
   return (
     <Card>
@@ -179,11 +222,12 @@ export default function HospitalList() {
                 <Form.Item>
                     <Space>
                         <Button type='primary' icon={<SearchOutlined />} htmlType='submit'>查询</Button>
-                        <Button disabled={true}>清空</Button>
+                        <Button disabled={Object.values(fields).every(item=>item===undefined)} onClick={clear}>清空</Button>
                     </Space>
                 </Form.Item>
             </Form>
             <Table 
+              loading={loading}
               className='mt'
               rowKey={'id'}
               columns={columns}
@@ -199,7 +243,6 @@ export default function HospitalList() {
               }}
               >
               </Table>
-
     </Card>
   )
 }

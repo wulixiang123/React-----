@@ -16,7 +16,7 @@ export interface IHospitalSetParams {
     apiUrl: string;
     contactsName: string;
     contactsPhone: string;
-    id?:string | number
+    id?:string | number;
 }
 /**
  * 医院设置对象类型
@@ -39,4 +39,7 @@ export interface IHospitalSetResponse {
     records:IHospitalSetList;
     total:number;
 }
+
+
+
 

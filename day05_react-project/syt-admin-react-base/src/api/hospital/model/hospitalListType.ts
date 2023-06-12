@@ -69,6 +69,12 @@ export type IHospitalList = IHospitalItem[]
  * 医院列表分页数据返回值类型
  */
 export interface IHospitalListResponse {
-    content:IHospitalList;
-    totalElements:number;
+    content: IHospitalList;
+    totalElements: number;
+}
+
+// 医院详情返回值类型
+export interface IHospitalDetailResponse {
+    "bookingRule": IBookingRule,
+    "hospital": IHospitalItem
 }
