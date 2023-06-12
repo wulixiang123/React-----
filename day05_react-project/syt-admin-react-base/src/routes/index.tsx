@@ -21,6 +21,7 @@ const HospitalList = lazy(()=>import("@pages/hospital/hospitalList/HospitalList"
 const HospitalSet = lazy(()=>import('@pages/hospital/hospitalSet/HospitalSet'))
 const AddOrUpdate = lazy(()=>import('@/pages/hospital/hospitalSet/components/AddOrUpdate'))
 const HospitalDetail  =lazy(()=>import('@pages/hospital/hospitalList/components/HospitalDetail'))
+const HospitalSchedule = lazy(()=>import('@pages/hospital/hospitalList/components/HospitalSchedule'))
 
 const load = (Comp: FC) => {
     return (
@@ -103,6 +104,14 @@ const routes: XRoutes = [
                         element:load(HospitalDetail),
                         meta: {
                             title: '医院详情'
+                        }
+                    },
+                    {
+                        hidden:true,
+                        path:'/syt/hospital/hospitalList/schedule/:hoscode',
+                        element:load(HospitalSchedule),
+                        meta: {
+                            title: '排班'
                         }
                     }
                 ]

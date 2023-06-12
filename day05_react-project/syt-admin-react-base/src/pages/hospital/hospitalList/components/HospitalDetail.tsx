@@ -1,5 +1,5 @@
 import { getHospitalDetail } from '@/api/hospital/hospitalList';
-import { IBookingRule, IHospitalItem } from '@api/hospital/model/hospitalListType';
+import { IBookingRule, IHospitalItem } from '@/api/hospital/model/hospitalListTypes';
 import { Button, Card, Descriptions, Image } from 'antd'
 import React,{useEffect,useState} from 'react'
 import { useParams } from 'react-router-dom'

@@ -78,3 +78,14 @@ export interface IHospitalDetailResponse {
     "bookingRule": IBookingRule,
     "hospital": IHospitalItem
 }
+
+// 科室每一项类型
+export interface IDepartmentItem{
+    depcode:string; // 科室编号
+    depname:string; // 科室名
+    children:IDepartmentList | null;
+    disabled?:boolean;
+}
+
+// 科室列表类型
+export type IDepartmentList = IDepartmentItem[]

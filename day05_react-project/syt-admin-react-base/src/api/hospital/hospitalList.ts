@@ -1,5 +1,5 @@
 import {request} from '@utils/http'
-import { IDistrictList, IHospitalDetailResponse, IHospitalListParams, IHospitalListResponse } from './model/hospitalListType'
+import { IDepartmentList, IDistrictList, IHospitalDetailResponse, IHospitalListParams, IHospitalListResponse } from './model/hospitalListTypes'
 /**
  * 获取地区列表
  * @param id 
@@ -38,4 +38,9 @@ export const getHospitalDetail = (id:string)=>{
 // 切换医院上线下线状态
 export const toggleState = (id:string,status:number)=>{
     return request.get<any,null>(`/admin/hosp/hospital/updateStatus/${id}/${status}`)
+}
+
+// 根据医院编号获取科室列表
+export const getDepartmentList = (hoscode:string) => {
+    return request.get<any,IDepartmentList>('/admin/hosp/department/' + hoscode)
 }

@@ -2,7 +2,7 @@ import { Button, Card, Form, Image, Input, Select, Space, Table } from 'antd'
 import {SearchOutlined} from '@ant-design/icons'
 import React,{useState,useEffect} from 'react'
 import { ColumnsType } from 'antd/lib/table'
-import { IDistrictList, IHospitalItem, IHospitalList } from '@/api/hospital/model/hospitalListType'
+import { IDistrictList, IHospitalItem, IHospitalList } from '@/api/hospital/model/hospitalListTypes'
 import { getDistrictList, getHospitalList, toggleState } from '@/api/hospital/hospitalList'
 import { useNavigate } from 'react-router-dom'
 const {Option} = Select
@@ -71,7 +71,7 @@ export default function HospitalList() {
         return(
           <Space>
             <Button type='primary' onClick={()=>navigate('/syt/hospital/hospitalList/show/' + row.id)}>查看</Button>
-            <Button type='primary'>排班</Button>
+            <Button type='primary' onClick={()=>navigate('/syt/hospital/hospitalList/schedule/'+ row.hoscode)}>排班</Button>
             <Button type='primary' onClick={()=>changeState(row.id,row.status?0:1)}>{row.status ? '下线':'上线'}</Button>
           </Space>
         )
@@ -99,7 +99,6 @@ export default function HospitalList() {
       districtCode:undefined,
       status:undefined
   })
-
   // 设置加载状态
   let [loading,setLoading] = useState<boolean>(false)
 

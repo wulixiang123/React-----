@@ -3,6 +3,7 @@ import React from "react"
 import {request} from "@utils/http"
 import { IHospitalSetParams, IHospitalSetResponse,IAddHospitalSetParams, IHospitalSetItem } from "./model/hospitalSetTypes"
 
+// 获取医院设置分页数据接口
 export const getHospitalSetList = ({page,limit,hosname,hoscode}:IHospitalSetParams) => {
     return request.get<any,IHospitalSetResponse>(`/admin/hosp/hospitalSet/${page}/${limit}`,{
         params:{
