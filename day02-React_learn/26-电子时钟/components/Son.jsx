@@ -13,7 +13,8 @@ export default class Son extends Component {
   }
   componentDidMount(){
     console.log('this:',this);
-    this.timer = setInterval(()=>{
+    // let timer = setInterval(()=>{//let有块级作用域,使用会有问题
+    this.timer = setInterval(()=>{// 把timer放在实例对象上解决
       console.log(111);
       this.setState({
         nowTime:moment().format('YYYY年MM月DD日 HH:mm:ss')
