@@ -1,3 +1,4 @@
+
 /**
  * 地区对象类型
  */
@@ -89,3 +90,44 @@ export interface IDepartmentItem{
 
 // 科室列表类型
 export type IDepartmentList = IDepartmentItem[]
+
+// 排班日期每一项的类型
+export interface IScheduleItem{
+    "workDate": string;// 当前年月日日期
+    "workDateMd": null,
+    "dayOfWeek": string; // 周几
+    "docCount": number;
+    "reservedNumber": number;// 可预约挂号上限人数
+    "availableNumber": number;// 剩余挂号人数
+    "status": null
+}
+
+
+// 排班日期列表类型
+export type IScheduleList = IScheduleItem[]
+
+// 排班日期响应结果类型
+export interface IScheduleResponse{
+    total: number;
+    bookingScheduleList: IScheduleList;
+    baseMap: {
+        hosname: string;
+    }
+}
+
+// 排班医生每一项类型
+export interface IDoctorItem{
+    "id": string;
+    "title": string;
+    "docname": string;
+    "skill": string;
+    "workDate": string;
+    "workTime": number;
+    "reservedNumber": number;
+    "availableNumber": number;
+    "amount": number;
+    "status": number;
+}
+
+// 排班医生数组类型
+export type IDoctorList = IDoctorItem[];

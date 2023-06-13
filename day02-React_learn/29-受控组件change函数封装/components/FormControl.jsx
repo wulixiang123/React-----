@@ -41,7 +41,7 @@ export default class FormControl extends Component {
     change(e) {
         console.log(e.target.name);//下面input中的name属性的值
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value//!!!!!!!!!!!!!!!!!!!!!
         })
     }
     render() {

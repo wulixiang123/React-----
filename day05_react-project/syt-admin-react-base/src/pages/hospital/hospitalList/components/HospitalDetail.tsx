@@ -8,7 +8,8 @@ export default function HospitalDetail() {
     let [hospital, setHospital] = useState<IHospitalItem>()
     let [bookingRule, setBookingRule] = useState<IBookingRule>()
     // path参数id获取
-    let {id} = useParams();
+    let {id} = useParams();//获取参数
+    
     const _getHospitalDetail = async ()=>{
         let {hospital,bookingRule} = await getHospitalDetail(id as string);
         setHospital(hospital);
